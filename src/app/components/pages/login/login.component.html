@@ -1,3 +1,63 @@
-<p>login works!</p>
-<button [routerLink]="['/auth/sign-up']">Register</button>
-<button [routerLink]="['/hybridchatbot/home']">Iniciar Sesión</button>
+<div class="w-full h-[10vh] flex items-center justify-center">
+  <p class="text-[3vh] font-bold">Iniciar Sesión</p>
+</div>
+
+<div class="w-full min-h-[20vh] flex justify-center items-center">
+  <div class="grid grid-cols-3 h-[45vh]">
+    <div></div>
+    <div
+      class="border rounded-xl bg-[#8dd0e1] p-6 m-0 shadow-xl flex flex-col justify-center items-center max-w-md mx-auto"
+    >
+      <form
+        [formGroup]="signin"
+        class="flex flex-col items-center w-full space-y-4"
+      >
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Correo:</p>
+          <input
+            type="text"
+            class="w-full rounded-md px-3 py-2 bg-gray-300 placeholder-gray-600 focus:outline-none"
+            placeholder="Ingrese su correo"
+            formControlName="email"
+          />
+        </div>
+
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Contraseña:</p>
+          <input
+            type="password"
+            class="w-full rounded-md px-3 py-2 bg-gray-300 placeholder-gray-600 focus:outline-none"
+            placeholder="Ingrese su contraseña"
+            formControlName="password"
+          />
+        </div>
+
+        <div
+          class="flex justify-center mt-4"
+          style="transform: scale(0.85); transform-origin: center"
+        >
+          <re-captcha [siteKey]="key"></re-captcha>
+        </div>
+      </form>
+      <div class="flex flex-col items-center">
+        <p class="mt-2 font-bold">¿Aún no posee una cuenta?</p>
+        <button
+          class="mt-4 px-6 py-2 rounded-xl bg-[#468999] font-bold hover:bg-[#3b7a89] duration-150 focus:outline-none focus:ring-2 focus:ring-[#3b7a89] transition-colors"
+          [routerLink]="['/auth/sign-up']"
+        >
+          Registrarse
+        </button>
+      </div>
+    </div>
+    <div></div>
+  </div>
+</div>
+
+<div class="w-full h-[10vh] mt-4 flex items-center justify-center">
+  <button
+    class="mt-14 px-6 py-2 rounded-xl font-bold bg-[#36A6EB]"
+    [routerLink]="['/hybridchatbot/home']"
+  >
+    Iniciar Sesión
+  </button>
+</div>
