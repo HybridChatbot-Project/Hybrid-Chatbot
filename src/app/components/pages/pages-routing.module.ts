@@ -5,6 +5,7 @@ import { RecordComponent } from './record/record.component';
 import { MedicResourcesComponent } from './medic-resources/medic-resources.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { ChatComponent } from './chat/chat.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
     path: 'statistics',
     data: { breadcrumb: 'Estadísticas' },
     component: StatisticsComponent,
+  },
+  {
+    path: 'profile',
+    data: { breadcrumb: 'Perfil' },
+    component: ProfileComponent,
   },
 ];
 

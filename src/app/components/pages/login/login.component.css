@@ -1,0 +1,25 @@
+::ng-deep .p-password {
+  width: 300px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+::ng-deep .p-password-input-wrapper {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+::ng-deep .p-password-input {
+  flex: 1 !important;
+  width: 100% !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+::ng-deep .p-password-toggle-icon {
+  margin-left: 0.5rem !important;
+  cursor: pointer !important;
+}

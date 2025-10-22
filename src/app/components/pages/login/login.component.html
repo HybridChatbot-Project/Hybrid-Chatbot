@@ -16,7 +16,7 @@
           <p class="font-bold text-gray-800">Correo:</p>
           <input
             type="text"
-            class="w-full rounded-md px-3 py-2 bg-gray-300 placeholder-gray-600 focus:outline-none"
+            class="w-full rounded-md px-3 py-2 bg-gray-300 placeholder-gray-400 focus:outline-none"
             placeholder="Ingrese su correo"
             formControlName="email"
           />
@@ -24,12 +24,17 @@
 
         <div class="w-full">
           <p class="font-bold text-gray-800">Contraseña:</p>
-          <input
-            type="password"
-            class="w-full rounded-md px-3 py-2 bg-gray-300 placeholder-gray-600 focus:outline-none"
-            placeholder="Ingrese su contraseña"
-            formControlName="password"
-          />
+          <div class="bg-gray-300 rounded-md px-3 py-2 flex items-center">
+            <p-password
+              formControlName="password"
+              [toggleMask]="true"
+              [feedback]="false"
+              placeholder="Ingrese su contraseña"
+              inputStyleClass="bg-gray-300 focus:outline-none"
+              styleClass="w-full flex items-center"
+              autocomplete="new-password"
+            ></p-password>
+          </div>
         </div>
 
         <div
@@ -61,3 +66,10 @@
     Iniciar Sesión
   </button>
 </div>
+
+<!--<input
+            type="password"
+            class="w-full rounded-md px-3 py-2 bg-gray-300 placeholder-gray-600 focus:outline-none"
+            placeholder="Ingrese su contraseña"
+            formControlName="password"
+          />-->

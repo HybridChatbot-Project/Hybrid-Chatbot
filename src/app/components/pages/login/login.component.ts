@@ -8,11 +8,18 @@ import {
 import { RouterModule } from '@angular/router';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { environments } from '../../../../environments/environment';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, FormsModule, ReactiveFormsModule, RecaptchaModule],
+  imports: [
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RecaptchaModule,
+    PasswordModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
