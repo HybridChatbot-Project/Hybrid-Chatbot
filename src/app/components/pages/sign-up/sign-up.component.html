@@ -1,0 +1,191 @@
+<div
+  class="flex flex-col items-center justify-start min-h-screen overflow-hidden mt-4"
+>
+  <div class="w-full flex items-center justify-center mb-6 relative">
+    <i
+      class="pi pi-arrow-left absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-700 cursor-pointer hover:text-[#468999] transition-colors"
+      (click)="goToLogin()"
+    ></i>
+    <p class="text-[3vh] font-bold">Registro</p>
+  </div>
+  <div class="flex flex-wrap w-full">
+    <div class="w-[35%] flex flex-col justify-center">
+      <div class="flex flex-col items-center">
+        <p-image
+          *ngIf="selectedImage"
+          [src]="selectedImage"
+          alt="Imagen seleccionada"
+          width="400"
+          height="400"
+          class="block object-contain"
+        ></p-image>
+        <input
+          type="file"
+          class="bg-[#468999] font-bold rounded-md"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+        />
+      </div>
+    </div>
+    <div class="w-[65%] flex item justify-center">
+      <div>
+        <form [formGroup]="signup" class="grid grid-cols-2 gap-4">
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Nombres:</p>
+            <input
+              type="text"
+              class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+              placeholder="Ingrese sus nombres"
+              formControlName="firstName"
+            />
+          </div>
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Apellidos:</p>
+            <input
+              type="text"
+              class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+              placeholder="Ingrese sus apellidos"
+              formControlName="lastName"
+            />
+          </div>
+
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Fecha de Nacimiento:</p>
+            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+              <p-calendar
+                formControlName="birthDate"
+                dateFormat="dd-mm-yy"
+                placeholder="Seleccione una fecha"
+                inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full placeholder-white"
+                styleClass="w-full flex items-center"
+              />
+            </div>
+          </div>
+
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Género</p>
+            <div class="bg-[#8DD0E1] rounded-md flex items-center">
+              <p-dropdown
+                [options]="genres"
+                optionLabel="name"
+                optionValue="id"
+                [showClear]="true"
+                formControlName="genre"
+                placeholder="Seleccione su género"
+                inputStyleClass="bg-gray-300 focus:outline-none placeholder-white"
+                styleClass="w-full flex items-center"
+              />
+            </div>
+          </div>
+
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Correo:</p>
+            <input
+              type="text"
+              class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+              placeholder="Ingrese su correo"
+              formControlName="email"
+            />
+          </div>
+
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Teléfono:</p>
+            <input
+              type="number"
+              class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+              placeholder="Ingrese su correo"
+              formControlName="phoneNumber"
+            />
+          </div>
+
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Contraseña:</p>
+            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+              <p-password
+                formControlName="password"
+                [toggleMask]="true"
+                [feedback]="false"
+                placeholder="Ingrese su contraseña"
+                inputStyleClass="bg-[#8DD0E1] focus:outline-none placeholder-white"
+                styleClass="w-full flex items-center"
+                autocomplete="new-password"
+              ></p-password>
+            </div>
+          </div>
+
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Repita la Contraseña:</p>
+            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+              <p-password
+                formControlName="confirmPassword"
+                [toggleMask]="true"
+                [feedback]="false"
+                placeholder="Ingrese su contraseña"
+                inputStyleClass="bg-[#8DD0E1] focus:outline-none placeholder-white"
+                styleClass="w-full flex items-center"
+                autocomplete="new-password"
+              ></p-password>
+            </div>
+          </div>
+          <div class="col-span-2 flex items-center justify-center mt-4">
+            <p-checkbox
+              name="politicas"
+              [binary]="true"
+              formControlName="acceptTerms"
+              (onChange)="onCheckboxClick($event)"
+              inputId="politicas"
+            ></p-checkbox>
+            <label for="politicas" class="ml-2 text-gray-800 cursor-pointer"
+              >Términos y Condiciones</label
+            >
+          </div>
+          <div class="col-span-2 flex items-center justify-center mt-6">
+            <button
+              class="px-6 py-2 rounded-xl bg-[#36A6EB] font-bold hover:bg-[#3b7a89] duration-150 focus:outline-none focus:ring-2 focus:ring-[#3b7a89] transition-colors"
+              [disabled]="!signup.valid"
+              (click)="onSignUp()"
+            >
+              Registrarse
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <p-dialog
+    header="Términos y Condiciones"
+    [(visible)]="showPolicies"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: '50vw' }"
+  >
+    <div class="space-y-3 text-gray-700">
+      <p><strong>1.</strong> Tus datos serán tratados de forma confidencial.</p>
+      <p>
+        <strong>2.</strong> No compartimos tu información con terceros sin tu
+        consentimiento.
+      </p>
+      <p>
+        <strong>3.</strong> Puedes solicitar la eliminación de tus datos en
+        cualquier momento.
+      </p>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-3 mt-4">
+        <button
+          pButton
+          label="Cancelar"
+          class="p-button-text px-3 py-2 text-gray-500"
+          (click)="onCancelPolicies()"
+        ></button>
+        <button
+          pButton
+          label="Aceptar"
+          class="p-button-primary px-3 py-2 bg-[#468999] border-none"
+          (click)="onAcceptPolicies()"
+        ></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>
