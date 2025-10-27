@@ -1,1 +1,124 @@
-<p>chat works!</p>
+<div
+  class="flex flex-col w-full h-[94vh] p-2 rounded-2xl shadow-lg overflow-hidden"
+>
+  <div
+    class="flex justify-between rounded-t-md items-center px-4 py-3 bg-[#468999] text-white"
+  >
+    <h2 class="text-lg font-semibold">Chat con el Asistente</h2>
+    <button
+      class="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded-md transition-colors"
+    >
+      Finalizar
+    </button>
+  </div>
+
+  <div
+    class="chat-scroll-container flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50"
+  >
+    @for (msg of messages; track $index) {
+    <div
+      class="flex"
+      [class.justify-start]="msg.sender === 'bot'"
+      [class.justify-end]="msg.sender === 'user'"
+    >
+      @if (msg.sender === 'bot') {
+      <div class="flex items-end space-x-2">
+        <div
+          class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6 text-gray-700"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+          >
+            <path d="M12 2v2" stroke-linecap="round" />
+            <circle cx="12" cy="1.5" r="0.6" fill="currentColor" />
+            <rect x="4" y="5" width="16" height="12" rx="2" ry="2" />
+            <circle cx="8.2" cy="10.2" r="0.9" fill="currentColor" />
+            <circle cx="15.8" cy="10.2" r="0.9" fill="currentColor" />
+            <rect
+              x="7.2"
+              y="13"
+              width="9.6"
+              height="1.2"
+              rx="0.6"
+              fill="currentColor"
+            />
+            <path d="M9 14h6" stroke-linecap="round" />
+          </svg>
+        </div>
+
+        <div
+          class="max-w-[70%] bg-gray-200 text-gray-800 px-4 py-2 rounded-2xl rounded-bl-none"
+        >
+          {{ msg.text }}
+        </div>
+      </div>
+      } @if (msg.sender === 'user') {
+      <div class="flex items-end space-x-2 flex-row-reverse">
+        <div
+          class="w-8 h-8 flex items-center justify-center rounded-full bg-[#468999] text-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 14c4.418 0 8 1.79 8 4v2H4v-2c0-2.21 3.582-4 8-4zm0-2a4 4 0 110-8 4 4 0 010 8z"
+            />
+          </svg>
+        </div>
+
+        <div
+          class="max-w-[70%] bg-[#6ea8b7] text-white px-4 py-2 rounded-2xl rounded-br-none"
+        >
+          {{ msg.text }}
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <form
+    [formGroup]="chatForm"
+    (ngSubmit)="sendMessage()"
+    class="flex items-center gap-3 p-4 bg-[#468999] border-t rounded-b-md border-gray-200"
+  >
+    <input
+      type="text"
+      formControlName="message"
+      placeholder="Escribe tu mensaje..."
+      class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#468999]"
+    />
+    <button
+      type="submit"
+      [disabled]="chatForm.invalid"
+      class="p-2 rounded-full bg-white border border-[#468999] hover:bg-[#f0fafa] transition-colors disabled:opacity-50"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-6 h-6 text-[#468999]"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 12l14-8-4 8 4 8-14-8z"
+        />
+      </svg>
+    </button>
+  </form>
+</div>

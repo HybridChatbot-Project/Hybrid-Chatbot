@@ -95,10 +95,10 @@ export class SignUpComponent {
   onSignUp(): void {
     if (this.signup.valid && this.isAccepted) {
       console.log('Formulario valido');
-      this.router.navigate(['/hybridchatbot/home']);
+      this.router.navigate(['/auth/login']);
     } else {
       console.log('El formulario no válido');
-      this.router.navigate(['/hybridchatbot/home']);
+      this.router.navigate(['/auth/login']);
     }
   }
 
