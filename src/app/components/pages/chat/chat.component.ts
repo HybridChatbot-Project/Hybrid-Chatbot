@@ -25,6 +25,7 @@ export class ChatComponent {
       text: '¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?',
     },
   ];
+  viewMode: boolean = false;
 
   constructor(private fb: FormBuilder) {
     this.chatForm = this.fb.group({
@@ -38,14 +39,11 @@ export class ChatComponent {
     const text = this.chatForm.value.message.trim();
     if (!text) return;
 
-    // Añadimos el mensaje del usuario
     this.messages.push({ sender: 'user', text });
     this.chatForm.reset();
 
-    // Hacemos scroll al final del contenedor
     this.scrollChatToBottom();
 
-    // Simulamos respuesta del bot
     setTimeout(() => {
       this.messages.push({
         sender: 'bot',
@@ -56,7 +54,6 @@ export class ChatComponent {
   }
 
   private scrollChatToBottom(): void {
-    // Seleccionamos el contenedor del chat de forma segura
     setTimeout(() => {
       const chatContainer = document.querySelector('.chat-scroll-container');
       if (chatContainer) {

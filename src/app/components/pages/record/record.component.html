@@ -1,1 +1,28 @@
-<p>record works!</p>
+<div
+  class="flex flex-col w-[95%] items-start justify-center ml-2 p-1 border-b-gray-950 border-b-2"
+>
+  <p class="font-bold text-[25px]">Historial de Conversaciones</p>
+</div>
+<p-table [styleClass]="'w-[95%] mt-4 ml-2'" [value]="infoData">
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="bg-[#a3c9c3] rounded-tl-xl text-center">Fecha</th>
+      <th class="bg-[#a3c9c3] text-center">Descripción</th>
+      <th class="bg-[#a3c9c3] rounded-tr-xl text-center">Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-infoData>
+    <tr>
+      <td class="text-center">{{ infoData.date }}</td>
+      <td class="text-center">{{ infoData.description }}</td>
+      <td class="text-center">
+        <p-button
+          label="Ver Detalles"
+          icon="pi pi-eye"
+          class="p-button-sm p-button-info"
+          (click)="viewDetails(infoData)"
+        />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
