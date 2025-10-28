@@ -1,0 +1,10 @@
+::ng-deep .p-card {
+  background-color: rgba(141, 208, 225, 0.5) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .p-card-body,
+::ng-deep .p-card-content {
+  background-color: transparent !important;
+}
