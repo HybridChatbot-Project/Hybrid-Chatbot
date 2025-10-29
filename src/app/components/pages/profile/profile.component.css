@@ -1,0 +1,3 @@
+:host ::ng-deep .p-image img {
+  @apply rounded-2xl shadow-lg border border-gray-200;
+}

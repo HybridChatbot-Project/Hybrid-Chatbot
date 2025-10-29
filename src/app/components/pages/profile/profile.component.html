@@ -1,1 +1,168 @@
-<p>profile works!</p>
+<div class="flex flex-col w-full h-full">
+  <div class="flex flex-row h-[65%]">
+    <div class="flex flex-col items-center justify-center w-[35%] h-full">
+      <p-image
+        *ngIf="selectedImage"
+        [src]="selectedImage"
+        alt="Foto de Perfil"
+        width="350"
+        height="350"
+        class="block object-contain"
+      >
+      </p-image>
+      <input
+        type="file"
+        class="bg-[#468999] font-bold rounded-md"
+        (change)="onFileSelected($event)"
+        accept="image/*"
+      />
+    </div>
+    <div class="flex item justify-center items-center w-[65%]">
+      <div>
+        <form [formGroup]="profileForm" class="grid grid-cols-2 gap-16 mt-4">
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Nombres</p>
+            <input
+              type="text"
+              formControlName="firstName"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+            />
+          </div>
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Apellidos</p>
+            <input
+              type="text"
+              formControlName="lastName"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+            />
+          </div>
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Email</p>
+            <input
+              type="email"
+              formControlName="email"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+            />
+          </div>
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Fecha de Nacimiento</p>
+            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+              <p-calendar
+                formControlName="birthDate"
+                dateFormat="dd-mm-yy"
+                placeholder="Seleccione una fecha"
+                inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full placeholder-white"
+                styleClass="w-full flex items-center"
+              />
+            </div>
+          </div>
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Celular</p>
+            <input
+              type="number"
+              formControlName="phoneNumber"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-row justify-center items-center">
+    <button
+      pButton
+      label="Editar"
+      class="bg-[#36A6EB] px-24 py-2 mr-4 rounded-xl text-white font-bold"
+      (click)="editModal('editar')"
+    ></button>
+    <button
+      pButton
+      label="Eliminar"
+      class="bg-red-700 px-24 py-2 rounded-xl text-white font-bold"
+      (click)="editModal('eliminar')"
+    ></button>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="showEditForm"
+  [modal]="true"
+  header="Edita tu información"
+>
+  <div class="w-full h-full flex flex-col justify-center items-start">
+    <div>
+      <form [formGroup]="editForm" class="grid grid-cols-1 gap-4">
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Nombres:</p>
+          <input
+            type="text"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            placeholder="Ingrese sus nombres"
+            formControlName="firstName"
+          />
+        </div>
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Apellidos:</p>
+          <input
+            type="text"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            placeholder="Ingrese sus apellidos"
+            formControlName="lastName"
+          />
+        </div>
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Email:</p>
+          <input
+            type="email"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            placeholder="Ingrese su email"
+            formControlName="email"
+          />
+        </div>
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Fecha de Nacimiento:</p>
+          <input
+            type="text"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            placeholder="Ingrese su fecha de Nacimiento"
+            formControlName="birthDate"
+          />
+        </div>
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Fecha de Nacimiento</p>
+          <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+            <p-calendar
+              formControlName="birthDate"
+              dateFormat="dd-mm-yy"
+              placeholder="Seleccione una fecha"
+              inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full placeholder-white"
+              styleClass="w-full flex items-center"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex flex-row justify-center items-center mt-4">
+      <button
+        pButton
+        label="Guardar"
+        class="bg-[#36A6EB] px-12 py-2 mr-4 rounded-xl text-white font-bold"
+        (click)="showConfirmationDialog = true"
+      ></button>
+      <button
+        pButton
+        label="Cancelar"
+        class="bg-red-700 px-9 py-2 rounded-xl text-white font-bold"
+        (click)="showEditForm = false"
+      ></button>
+    </div>
+  </div>
+</p-dialog>
+
+<app-confirmation-dialog
+  [(visible)]="showConfirmationDialog"
+  [title]="contentDialog.title"
+  [description]="contentDialog.description"
+  (confirm)="switchActionDialog()"
+  (cancel)="showConfirmationDialog = false"
+></app-confirmation-dialog>
