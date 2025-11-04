@@ -25,7 +25,7 @@
             <input
               type="text"
               formControlName="firstName"
-              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2 text-white font-semibold"
             />
           </div>
           <div class="w-full">
@@ -33,7 +33,7 @@
             <input
               type="text"
               formControlName="lastName"
-              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2 text-white font-semibold"
             />
           </div>
           <div class="w-full">
@@ -41,7 +41,7 @@
             <input
               type="email"
               formControlName="email"
-              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2 text-white font-semibold"
             />
           </div>
           <div class="w-full">
@@ -51,7 +51,7 @@
                 formControlName="birthDate"
                 dateFormat="dd-mm-yy"
                 placeholder="Seleccione una fecha"
-                inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full placeholder-white"
+                inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full text-white placeholder-white font-semibold"
                 styleClass="w-full flex items-center"
               />
             </div>
@@ -61,19 +61,21 @@
             <input
               type="number"
               formControlName="phoneNumber"
-              class="rounded-md bg-[#8DD0E1] px-3 py-2"
+              class="rounded-md bg-[#8DD0E1] px-3 py-2 text-white font-semibold"
             />
           </div>
           <div class="w-full">
             <p class="font-bold text-gray-800">Género</p>
-            <div class="bg-[#8DD0E1] rounded-md flex items-center">
+            <div
+              class="bg-[#8DD0E1] rounded-md flex items-center font-semibold"
+            >
               <p-dropdown
                 [options]="genres"
                 optionLabel="name"
                 optionValue="id"
                 formControlName="genre"
                 placeholder="Seleccione su género"
-                inputStyleClass="bg-gray-300 focus:outline-none placeholder-white"
+                inputStyleClass="bg-gray-300 focus:outline-none placeholder-white font-semibold"
                 styleClass="w-full flex items-center"
               />
             </div>
@@ -105,12 +107,12 @@
 >
   <div class="w-full h-full flex flex-col justify-center items-start">
     <div>
-      <form [formGroup]="editForm" class="grid grid-cols-1 gap-4">
+      <form [formGroup]="editForm" class="grid grid-cols-2 gap-4">
         <div class="w-full">
           <p class="font-bold text-gray-800">Nombres:</p>
           <input
             type="text"
-            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] text-white placeholder-white focus:outline-none font-semibold"
             placeholder="Ingrese sus nombres"
             formControlName="firstName"
           />
@@ -119,7 +121,7 @@
           <p class="font-bold text-gray-800">Apellidos:</p>
           <input
             type="text"
-            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] text-white placeholder-white focus:outline-none font-semibold"
             placeholder="Ingrese sus apellidos"
             formControlName="lastName"
           />
@@ -128,18 +130,18 @@
           <p class="font-bold text-gray-800">Email:</p>
           <input
             type="email"
-            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] text-white placeholder-white focus:outline-none font-semibold"
             placeholder="Ingrese su email"
             formControlName="email"
           />
         </div>
         <div class="w-full">
-          <p class="font-bold text-gray-800">Fecha de Nacimiento:</p>
+          <p class="font-bold text-gray-800">Celular:</p>
           <input
-            type="text"
-            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
+            type="number"
+            class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] text-white placeholder-white focus:outline-none font-semibold"
             placeholder="Ingrese su fecha de Nacimiento"
-            formControlName="birthDate"
+            formControlName="phoneNumber"
           />
         </div>
         <div class="w-full">
@@ -149,27 +151,50 @@
               formControlName="birthDate"
               dateFormat="dd-mm-yy"
               placeholder="Seleccione una fecha"
-              inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full placeholder-white"
+              inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full placeholder-white text-white font-semibold"
               styleClass="w-full flex items-center"
             />
           </div>
         </div>
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Género</p>
+          <div class="bg-[#8DD0E1] rounded-md flex items-center">
+            <p-dropdown
+              [options]="genres"
+              optionLabel="name"
+              optionValue="id"
+              formControlName="genre"
+              placeholder="Seleccione su género"
+              inputStyleClass="bg-gray-300 focus:outline-none placeholder-white text-white font-semibold"
+              styleClass="w-full flex items-center"
+            />
+          </div>
+        </div>
+        <div class="w-full">
+          <p class="font-bold text-gray-800">Contraseña (Opcional)</p>
+          <input
+            type="text"
+            formControlName="password"
+            placeholder="Ingrese su celular"
+            class="rounded-md bg-[#8DD0E1] text-white px-3 py-2 placeholder-white focus:outline-none font-semibold"
+          />
+        </div>
       </form>
     </div>
-    <div class="flex flex-row justify-center items-center mt-4">
-      <button
-        pButton
-        label="Guardar"
-        class="bg-[#36A6EB] px-12 py-2 mr-4 rounded-xl text-white font-bold"
-        (click)="showConfirmationDialog = true"
-      ></button>
-      <button
-        pButton
-        label="Cancelar"
-        class="bg-red-700 px-9 py-2 rounded-xl text-white font-bold"
-        (click)="showEditForm = false"
-      ></button>
-    </div>
+  </div>
+  <div class="flex flex-row justify-center items-center mt-4">
+    <button
+      pButton
+      label="Guardar"
+      class="bg-[#36A6EB] px-12 py-2 mr-4 rounded-xl text-white font-bold"
+      (click)="showConfirmationDialog = true"
+    ></button>
+    <button
+      pButton
+      label="Cancelar"
+      class="bg-red-700 px-9 py-2 rounded-xl text-white font-bold"
+      (click)="showEditForm = false"
+    ></button>
   </div>
 </p-dialog>
 

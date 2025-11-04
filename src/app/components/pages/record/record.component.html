@@ -7,14 +7,18 @@
   <ng-template pTemplate="header">
     <tr>
       <th class="bg-[#a3c9c3] rounded-tl-xl text-center">Fecha</th>
-      <th class="bg-[#a3c9c3] text-center">Descripción</th>
+      <th class="bg-[#a3c9c3] text-center">Primer comentario</th>
+      <th class="bg-[#a3c9c3] text-center">Calificación</th>
+      <th class="bg-[#a3c9c3] text-center">Comentario</th>
       <th class="bg-[#a3c9c3] rounded-tr-xl text-center">Acciones</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-infoData>
     <tr>
-      <td class="text-center">{{ infoData.date }}</td>
-      <td class="text-center">{{ infoData.description }}</td>
+      <td class="text-center">{{ infoData.createDate }}</td>
+      <td class="text-center">{{ infoData.firstLine }}</td>
+      <td class="text-center">{{ infoData.grade }}</td>
+      <td class="text-center">{{ infoData.comment }}</td>
       <td class="text-center">
         <p-button
           label="Ver Detalles"

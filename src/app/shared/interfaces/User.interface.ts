@@ -4,7 +4,7 @@ export interface UserRequest {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   birthDate: Date;
   phoneNumber: string;
   gender: number;

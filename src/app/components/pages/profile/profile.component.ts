@@ -16,6 +16,7 @@ import { ConfirmationDialogComponent } from '../../../shared/components/confirma
 import { UserService } from '../../../shared/services/user.service';
 import { GenreService } from '../../../shared/services/genre.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { UserRequest } from '../../../shared/interfaces/User.interface';
 
 @Component({
   selector: 'app-profile',
@@ -39,6 +40,7 @@ export class ProfileComponent implements OnInit {
   selectedImage?: string;
   showEditForm: boolean = false;
   showConfirmationDialog: boolean = false;
+  userId: number = Number(localStorage.getItem('userId'));
   contentDialog: any = {
     title: '',
     description: '',
@@ -60,6 +62,8 @@ export class ProfileComponent implements OnInit {
     email: new FormControl(),
     phoneNumber: new FormControl(),
     birthDate: new FormControl(),
+    genre: new FormControl(),
+    password: new FormControl(),
   });
 
   constructor(
@@ -68,8 +72,9 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.profileForm.disable();
     this.listGenres();
-    this.loadUserProfile(Number(localStorage.getItem('userId')));
+    this.loadUserProfile(this.userId);
   }
 
   genres: any[] = [];
@@ -101,11 +106,32 @@ export class ProfileComponent implements OnInit {
   }
 
   editProfile(): void {
-    console.log('Profile updated');
+    const editData: UserRequest = {
+      firstName: this.editForm.value.firstName,
+      lastName: this.editForm.value.lastName,
+      email: this.editForm.value.email,
+      birthDate: this.editForm.value.birthDate,
+      phoneNumber: this.editForm.value.phoneNumber,
+      password: this.editForm.value.password,
+      gender: this.editForm.value.genre,
+    };
+    this.userService.updateUserById(this.userId, editData).subscribe({
+      next: (response) => {
+        if (response.status_code === 200) {
+          console.log('Profile updated');
+        }
+      },
+    });
   }
 
   deleteProfile(): void {
-    console.log('Profile deleted');
+    this.userService.deleteUserById(this.userId).subscribe({
+      next: (response) => {
+        if (response.status_code === 200) {
+          console.log('Profile deleted');
+        }
+      },
+    });
   }
 
   switchActionDialog(): void {
@@ -141,6 +167,7 @@ export class ProfileComponent implements OnInit {
     this.userService.findUserById(userId).subscribe({
       next: (response) => {
         if (response.status_code === 200) {
+          //FORM PRINCIPAL
           this.profileForm.controls['firstName'].setValue(
             response.data?.firstName
           );
@@ -155,6 +182,20 @@ export class ProfileComponent implements OnInit {
             new Date(response.data?.birthDate || '')
           );
           this.profileForm.controls['genre'].setValue(response.data?.genre.id);
+
+          //FORM EDICIÓN
+          this.editForm.controls['firstName'].setValue(
+            response.data?.firstName
+          );
+          this.editForm.controls['lastName'].setValue(response.data?.lastName);
+          this.editForm.controls['email'].setValue(response.data?.email);
+          this.editForm.controls['phoneNumber'].setValue(
+            response.data?.phoneNumber
+          );
+          this.editForm.controls['birthDate'].setValue(
+            new Date(response.data?.birthDate || '')
+          );
+          this.editForm.controls['genre'].setValue(response.data?.genre.id);
         }
       },
     });

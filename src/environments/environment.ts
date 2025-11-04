@@ -6,4 +6,6 @@ export const environments = {
   endpoint_auth: '/api-hybridchatbot/auth',
   endpoint_user: '/api-hybridchatbot/user',
   endpoint_genre: '/api-hybridchatbot/genre',
+  endpoint_conversation: '/api-hybridchatbot/conversation',
+  endpoint_message: '/api-hybridchatbot/message',
 };
