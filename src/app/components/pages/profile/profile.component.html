@@ -64,6 +64,20 @@
               class="rounded-md bg-[#8DD0E1] px-3 py-2"
             />
           </div>
+          <div class="w-full">
+            <p class="font-bold text-gray-800">Género</p>
+            <div class="bg-[#8DD0E1] rounded-md flex items-center">
+              <p-dropdown
+                [options]="genres"
+                optionLabel="name"
+                optionValue="id"
+                formControlName="genre"
+                placeholder="Seleccione su género"
+                inputStyleClass="bg-gray-300 focus:outline-none placeholder-white"
+                styleClass="w-full flex items-center"
+              />
+            </div>
+          </div>
         </form>
       </div>
     </div>

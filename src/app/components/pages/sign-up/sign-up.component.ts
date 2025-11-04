@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -14,6 +14,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ImageModule } from 'primeng/image';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
+import { UserRequest } from '../../../shared/interfaces/User.interface';
+import { AuthService } from '../../../shared/services/auth.service';
+import { response } from 'express';
+import { GenreService } from '../../../shared/services/genre.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -34,8 +38,13 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
 })
-export class SignUpComponent {
-  constructor(private router: Router, private route: ActivatedRoute) {}
+export class SignUpComponent implements OnInit {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private genreService: GenreService
+  ) {}
 
   selectedImage?: string;
   showPolicies: boolean = false;
@@ -57,6 +66,20 @@ export class SignUpComponent {
     { id: 1, name: 'Masculino' },
     { id: 2, name: 'Femenino' },
   ];
+
+  ngOnInit(): void {
+    this.listGenres();
+  }
+
+  listGenres(): void {
+    this.genreService.listGenres().subscribe({
+      next: (response) => {
+        if (response.status_code === 200) {
+          this.genres = response.data.map((x) => ({ id: x.id, name: x.genre }));
+        }
+      },
+    });
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -93,12 +116,30 @@ export class SignUpComponent {
   }
 
   onSignUp(): void {
-    if (this.signup.valid && this.isAccepted) {
-      console.log('Formulario valido');
-      this.router.navigate(['/auth/login']);
+    if (
+      this.signup.valid &&
+      this.isAccepted &&
+      this.signup.value.password === this.signup.value.confirmPassword
+    ) {
+      const formRegister: UserRequest = {
+        firstName: this.signup.value.firstName!,
+        lastName: this.signup.value.lastName!,
+        birthDate: this.signup.value.birthDate!,
+        gender: this.signup.value.genre!,
+        email: this.signup.value.email!,
+        password: this.signup.value.password!,
+        phoneNumber: this.signup.value.phoneNumber!,
+      };
+      this.authService.registerUser(formRegister).subscribe({
+        next: (response) => {
+          if (response.status_code === 200) {
+            console.log('Usuario registrado con éxito');
+            this.goToLogin();
+          }
+        },
+      });
     } else {
-      console.log('El formulario no válido');
-      this.router.navigate(['/auth/login']);
+      console.log('El formulario no es válido');
     }
   }
 

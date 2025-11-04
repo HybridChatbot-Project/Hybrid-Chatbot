@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Button, ButtonModule } from 'primeng/button';
-import { ChatMessage } from '../../../shared/interfaces/Chat';
+import { ChatMessage } from '../../../shared/interfaces/Chat.interface';
 import {
   FormBuilder,
   FormGroup,

@@ -93,7 +93,7 @@ export class HomeComponent {
     ];
   }
 
-  name: string = 'Usuario';
+  name: string = localStorage.getItem('userFirstName') || 'Usuario';
   homeRoutes: any = [];
 
   sanitize(svg: string): SafeHtml {
