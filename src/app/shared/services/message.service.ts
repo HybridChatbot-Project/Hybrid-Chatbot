@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { env } from 'process';
 import { environments } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { BaseResponseList } from '../interfaces/Common.inteface';
+import { MessageResponse } from '../interfaces/Chat.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +14,12 @@ export class MessageService {
 
   private url = environments.localhost + environments.endpoint_message;
 
-  listMessagesByConversationId(id: number) {
-    return this.http.get(`${this.url}/find-by-conversation/${id}`);
+  listMessagesByConversationId(
+    id: number
+  ): Observable<BaseResponseList<MessageResponse>> {
+    return this.http.get<BaseResponseList<MessageResponse>>(
+      `${this.url}/find-by-conversation/${id}`
+    );
   }
 
   findFirstLineConversation(id: number): Observable<string> {

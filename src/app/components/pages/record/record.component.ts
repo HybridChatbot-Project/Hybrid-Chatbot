@@ -7,6 +7,8 @@ import { ConversationService } from '../../../shared/services/conversation.servi
 import { ConversationTable } from '../../../shared/interfaces/Conversation.interface';
 import { MessageService } from '../../../shared/services/message.service';
 import { forkJoin } from 'rxjs';
+import { environments } from '../../../../environments/environment';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-record',
@@ -26,6 +28,7 @@ export class RecordComponent implements OnInit {
   ) {}
 
   userId: number = Number(localStorage.getItem('userId'));
+  secretKey: string = environments.secretKeyUrl;
 
   ngOnInit(): void {
     this.listConversations();
@@ -46,8 +49,9 @@ export class RecordComponent implements OnInit {
               createDate:
                 this.datePipe.transform(x.createDate, 'dd-MM-yyyy HH:mm') || '',
               firstLine: lines[i],
-              grade: x.grade,
+              grade: x.grade.toString() ?? 'Sin calificación',
               comment: x.comment ?? 'Sin Comentarios',
+              closed: x.isClosed,
             }));
           });
         }
@@ -64,8 +68,13 @@ export class RecordComponent implements OnInit {
   }
 
   viewDetails(selectedRecord: any) {
+    const params = { id: selectedRecord.id, closed: selectedRecord.closed };
+    const cipher = CryptoJS.AES.encrypt(
+      JSON.stringify(params),
+      this.secretKey
+    ).toString();
     this.router.navigate(['/hybridchatbot/chat'], {
-      queryParams: { id: selectedRecord.id },
+      queryParams: { data: encodeURIComponent(cipher) },
     });
   }
 }

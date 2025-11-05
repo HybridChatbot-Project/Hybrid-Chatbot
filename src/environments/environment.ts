@@ -8,4 +8,5 @@ export const environments = {
   endpoint_genre: '/api-hybridchatbot/genre',
   endpoint_conversation: '/api-hybridchatbot/conversation',
   endpoint_message: '/api-hybridchatbot/message',
+  secretKeyUrl: 'SecurityHibridChatbotSecretKeyJwt1',
 };

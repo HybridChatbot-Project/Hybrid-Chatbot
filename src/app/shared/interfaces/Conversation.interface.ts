@@ -5,12 +5,14 @@ export interface ConversationResponse {
   userId: number;
   grade: number;
   comment: string;
+  isClosed: boolean;
 }
 
 export interface ConversationTable {
   id: number;
   createDate: string;
   firstLine: string;
-  grade: number;
+  grade: string;
   comment: string;
+  closed: boolean;
 }
