@@ -1,1 +1,100 @@
-<p>statistics works!</p>
+<div class="w-full flex flex-col justify-center items-center">
+  <p class="font-bold text-[25px] mt-2">Estadísticas del usuario</p>
+  <p-card [style]="{ width: '70rem' }">
+    <ng-template pTemplate="title">
+      <p>Grado de satisfacción</p>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <div class="flex flex-row w-full h-full">
+        <p-chart
+          type="line"
+          [data]="chartDataConversationGraph"
+          [options]="chartOptionsGraph"
+          class="w-full h-full"
+        ></p-chart>
+        <div class="flex flex-col ml-8">
+          <p class="font-semibold text-[15px]">Descripción:</p>
+          <p class="text-justify">
+            En este gráfico visualizarás la tendencia de tus calificaciones
+            hacia las diversas conversaciones que posees con nuestro chatbot.
+          </p>
+          <div class="flex flex-row justify-around mt-2">
+            <button (click)="changeMode('week', 'conversation')">
+              Semanal
+            </button>
+            <button (click)="changeMode('month', 'conversation')">
+              Mensual
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-card>
+  <p-card [style]="{ width: '70rem' }">
+    <ng-template pTemplate="title">
+      <p>Grado de Ansiedad</p>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <div class="flex flex-row w-full h-full">
+        <p-chart
+          type="line"
+          [data]="chartDataAnxietyGraph"
+          [options]="chartOptions"
+          class="w-full h-full"
+        ></p-chart>
+        <div class="flex flex-col ml-8">
+          <p class="font-semibold text-[15px]">Descripción:</p>
+          <p class="text-justify">
+            En este gráfico observarás el progreso semanal o mensual de tu nivel
+            de ansiedad através de encuestas respondidas correctamente.
+          </p>
+          <div class="flex flex-row justify-around mt-2">
+            <button (click)="changeMode('week', 'anxiety')">Semanal</button>
+            <button (click)="changeMode('month', 'anxiety')">Mensual</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-card>
+  <button (click)="showForm = true">Mide tu ansiedad</button>
+</div>
+
+<p-dialog
+  header="Inventario de Ansiedad de Beck (BAI)"
+  [modal]="true"
+  [(visible)]="showForm"
+  (onHide)="cancelForm()"
+>
+  <div class="">
+    @for(info of dataInfo; track $index){
+    <p class="font-semibold">{{ info.question }}</p>
+    <div class="flex flex-row w-full">
+      @for(option of info.options; track $index) {
+      <p-radioButton
+        name="info{{ info.id }}"
+        [value]="option"
+        [(ngModel)]="info.selectedOption"
+        [label]="option"
+      ></p-radioButton>
+      }
+    </div>
+    }
+    <div class="flex flex-row items-center justify-around mt-4 rounded-md">
+      <button class="bg-blue-900" (click)="showDialogConfirmation = true">
+        Guardar
+      </button>
+      <button class="bg-red-700" (click)="cancelForm()">Cancelar</button>
+    </div>
+  </div>
+</p-dialog>
+
+<app-confirmation-dialog
+  [(visible)]="showDialogConfirmation"
+  [title]="'¿Está seguro de continuar con el envió de la encuesta?'"
+  [description]="
+    'Recuerde responder siempre con honestidad a la preguntas, de esta manera se obtendrá un resultado válido y conciso.'
+  "
+  (confirm)="submitForm()"
+  (cancel)="showDialogConfirmation = false"
+>
+</app-confirmation-dialog>

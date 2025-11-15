@@ -16,3 +16,9 @@ export interface ConversationTable {
   comment: string;
   closed: boolean;
 }
+export interface ConversationRequest {
+  userId: number;
+  grade: number;
+  userComment: string;
+  isClosed: number;
+}
