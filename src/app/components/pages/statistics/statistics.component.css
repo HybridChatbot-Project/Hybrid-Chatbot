@@ -1,0 +1,43 @@
+:host ::ng-deep .p-radiobutton .p-radiobutton-box {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e1;
+  background-color: #ffffff;
+  transition: all 0.2s;
+}
+
+:host ::ng-deep .p-radiobutton .p-radiobutton-box:hover {
+  border-color: #36a6eb;
+}
+
+:host ::ng-deep .p-radiobutton .p-radiobutton-box.p-highlight {
+  border-color: #36a6eb;
+  background-color: #36a6eb;
+}
+
+:host ::ng-deep .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff;
+}
+
+:host ::ng-deep .p-radiobutton {
+  display: flex;
+  align-items: center;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+  font-weight: 700;
+  color: #2d3e40;
+  font-size: 18px;
+}

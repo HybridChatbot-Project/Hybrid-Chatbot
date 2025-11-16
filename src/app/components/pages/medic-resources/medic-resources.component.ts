@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnDestroy,
   OnInit,
   ViewChild,
   viewChild,
@@ -23,13 +24,17 @@ import {
   templateUrl: './medic-resources.component.html',
   styleUrl: './medic-resources.component.css',
 })
-export class MedicResourcesComponent implements OnInit {
+export class MedicResourcesComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   constructor(private medicResourcesService: MedicResourcesService) {}
   ngOnInit() {
     this.listArticles();
   }
   nextPage!: string;
   isLoading: boolean = false;
+  private observer!: IntersectionObserver;
+  @ViewChild('loadMoreRef') loadMoreRef!: ElementRef;
 
   cardContent: MedicResourceTable[] = [
     // {
@@ -48,6 +53,71 @@ export class MedicResourcesComponent implements OnInit {
     //   link: 'https://www.verabelpropiedades.com',
     // },
   ];
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.setupObserver();
+    }, 100);
+  }
+
+  private setupObserver(): void {
+    const scrollContainer = this.findScrollContainer(
+      this.loadMoreRef.nativeElement
+    );
+
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        console.log('Intersection triggered:', {
+          isIntersecting: target.isIntersecting,
+          hasNextPage: !!this.nextPage,
+          isLoading: this.isLoading,
+        });
+
+        if (target.isIntersecting && this.nextPage && !this.isLoading) {
+          console.log('Loading more articles...');
+          this.loadMoreArticles(this.nextPage);
+        }
+      },
+      {
+        root: scrollContainer,
+        threshold: 0.1,
+        rootMargin: '200px',
+      }
+    );
+
+    if (this.loadMoreRef) {
+      this.observer.observe(this.loadMoreRef.nativeElement);
+    }
+  }
+
+  private findScrollContainer(element: HTMLElement): HTMLElement | null {
+    let parent = element.parentElement;
+
+    while (parent) {
+      const overflow = window.getComputedStyle(parent).overflow;
+      const overflowY = window.getComputedStyle(parent).overflowY;
+
+      if (
+        overflow === 'auto' ||
+        overflow === 'scroll' ||
+        overflowY === 'auto' ||
+        overflowY === 'scroll'
+      ) {
+        return parent;
+      }
+
+      parent = parent.parentElement;
+    }
+
+    return null;
+  }
+
+  ngOnDestroy(): void {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
 
   listArticles() {
     this.isLoading = true;

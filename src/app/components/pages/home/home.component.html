@@ -15,14 +15,17 @@
     </div>
     @for (homeRoute of homeRoutes; track $index) {
     <div
-      class="flex flex-row justify-start items-center w-[50%] h-[10%] bg-[#BDD7CB] mt-4 border rounded-2xl border-gray-950"
+      class="flex flex-col justify-center items-center w-[50%] min-h-[100px] bg-[#BDD7CB] mt-2 p-2 border rounded-2xl border-gray-950 cursor-pointer hover:bg-[#a8c4b8] transition-colors"
       [routerLink]="[homeRoute.path]"
     >
-      <div [innerHTML]="homeRoute.icon" class="text-black p-2"></div>
-      <div class="flex flex-col items-start">
-        <p class="font-bold text-[20px]">{{ homeRoute.title }}</p>
-        <p class="text-[15px]">{{ homeRoute.subtitle }}</p>
+      <div class="flex flex-row items-center gap-3 mb-1">
+        <div [innerHTML]="homeRoute.icon" class="text-black"></div>
+        <p class="font-bold text-[20px] m-0">{{ homeRoute.title }}</p>
       </div>
+
+      <p class="text-[15px] text-gray-700 m-0 text-center">
+        {{ homeRoute.subtitle }}
+      </p>
     </div>
     }
   </div>

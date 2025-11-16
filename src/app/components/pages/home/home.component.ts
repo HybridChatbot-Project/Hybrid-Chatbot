@@ -16,7 +16,8 @@ export class HomeComponent {
     this.homeRoutes = [
       {
         title: 'Chat',
-        subtitle: 'Usa nuestro asistente virtual',
+        subtitle:
+          'Conversa con nuestro asistente especializado en bienestar emocional',
         path: '/hybridchatbot/chat',
         icon: this.sanitize(`<svg
       xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +36,7 @@ export class HomeComponent {
       },
       {
         title: 'Historial',
-        subtitle: 'Mira tu historial de conversaciones',
+        subtitle: 'Revisa tus conversaciones anteriores y observa tu evolución',
         path: '/hybridchatbot/record',
         icon: this.sanitize(`<svg
       xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +55,7 @@ export class HomeComponent {
       },
       {
         title: 'Recursos',
-        subtitle: 'Revisa el contenido informativo que tenemos para ti',
+        subtitle: 'Explora artículos y contenido educativo sobre salud mental',
         path: '/hybridchatbot/resources',
         icon: this.sanitize(`<svg
       xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +74,8 @@ export class HomeComponent {
       },
       {
         title: 'Estadísticas',
-        subtitle: 'Revisa tu progreso actual',
+        subtitle:
+          'Visualiza tu progreso y nivel de ansiedad a través del tiempo',
         path: '/hybridchatbot/statistics',
         icon: this.sanitize(`<svg
       xmlns="http://www.w3.org/2000/svg"

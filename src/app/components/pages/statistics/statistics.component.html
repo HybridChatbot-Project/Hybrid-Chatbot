@@ -1,28 +1,39 @@
-<div class="w-full flex flex-col justify-center items-center">
-  <p class="font-bold text-[25px] mt-2">Estadísticas del usuario</p>
-  <p-card [style]="{ width: '70rem' }">
+<div class="w-full flex flex-col justify-center items-center py-6">
+  <p class="font-bold text-[25px] mt-2 mb-6">Estadísticas del usuario</p>
+  <p-card [style]="{ width: '70rem' }" class="mb-6 shadow-md">
     <ng-template pTemplate="title">
       <p>Grado de satisfacción</p>
     </ng-template>
     <ng-template pTemplate="body">
-      <div class="flex flex-row w-full h-full">
-        <p-chart
-          type="line"
-          [data]="chartDataConversationGraph"
-          [options]="chartOptionsGraph"
-          class="w-full h-full"
-        ></p-chart>
-        <div class="flex flex-col ml-8">
-          <p class="font-semibold text-[15px]">Descripción:</p>
-          <p class="text-justify">
-            En este gráfico visualizarás la tendencia de tus calificaciones
-            hacia las diversas conversaciones que posees con nuestro chatbot.
-          </p>
-          <div class="flex flex-row justify-around mt-2">
-            <button (click)="changeMode('week', 'conversation')">
+      <div class="flex flex-row w-full h-full gap-6">
+        <div class="flex-[3]">
+          <p-chart
+            type="line"
+            [data]="chartDataConversationGraph"
+            [options]="chartOptionsGraph"
+            class="w-full"
+          ></p-chart>
+        </div>
+
+        <div class="flex-[1] flex flex-col">
+          <div>
+            <p class="font-semibold text-[15px]">Descripción:</p>
+            <p class="text-justify leading-relaxed">
+              En este gráfico visualizarás la tendencia de tus calificaciones
+              hacia las diversas conversaciones que posees con nuestro chatbot.
+            </p>
+          </div>
+          <div class="flex flex-col gap-2 mt-4">
+            <button
+              (click)="changeMode('week', 'conversation')"
+              class="px-4 py-2 bg-[#36a6eb] text-white font-semibold rounded-lg hover:bg-[#2a8ac7] transition-colors"
+            >
               Semanal
             </button>
-            <button (click)="changeMode('month', 'conversation')">
+            <button
+              (click)="changeMode('month', 'conversation')"
+              class="px-4 py-2 bg-[#36a6eb] text-white font-semibold rounded-lg hover:bg-[#2a8ac7] transition-colors"
+            >
               Mensual
             </button>
           </div>
@@ -30,33 +41,52 @@
       </div>
     </ng-template>
   </p-card>
-  <p-card [style]="{ width: '70rem' }">
+  <p-card [style]="{ width: '70rem' }" class="mb-6 shadow-md">
     <ng-template pTemplate="title">
       <p>Grado de Ansiedad</p>
     </ng-template>
     <ng-template pTemplate="body">
-      <div class="flex flex-row w-full h-full">
-        <p-chart
-          type="line"
-          [data]="chartDataAnxietyGraph"
-          [options]="chartOptions"
-          class="w-full h-full"
-        ></p-chart>
-        <div class="flex flex-col ml-8">
-          <p class="font-semibold text-[15px]">Descripción:</p>
-          <p class="text-justify">
-            En este gráfico observarás el progreso semanal o mensual de tu nivel
-            de ansiedad através de encuestas respondidas correctamente.
-          </p>
-          <div class="flex flex-row justify-around mt-2">
-            <button (click)="changeMode('week', 'anxiety')">Semanal</button>
-            <button (click)="changeMode('month', 'anxiety')">Mensual</button>
+      <div class="flex flex-row w-full h-full gap-6">
+        <div class="flex-[3]">
+          <p-chart
+            type="line"
+            [data]="chartDataAnxietyGraph"
+            [options]="chartOptions"
+            class="w-full h-full"
+          ></p-chart>
+        </div>
+        <div class="flex-[1] flex-col">
+          <div>
+            <p class="font-semibold text-[15px]">Descripción:</p>
+            <p class="text-justify">
+              En este gráfico observarás el progreso semanal o mensual de tu
+              nivel de ansiedad através de encuestas respondidas correctamente.
+            </p>
+          </div>
+          <div class="flex flex-col gap-2 mt-4">
+            <button
+              (click)="changeMode('week', 'anxiety')"
+              class="px-4 py-2 bg-[#36a6eb] text-white font-semibold rounded-lg hover:bg-[#2a8ac7] transition-colors"
+            >
+              Semanal
+            </button>
+            <button
+              (click)="changeMode('month', 'anxiety')"
+              class="px-4 py-2 bg-[#36a6eb] text-white font-semibold rounded-lg hover:bg-[#2a8ac7] transition-colors"
+            >
+              Mensual
+            </button>
           </div>
         </div>
       </div>
     </ng-template>
   </p-card>
-  <button (click)="showForm = true">Mide tu ansiedad</button>
+  <button
+    (click)="showForm = true"
+    class="px-8 py-3 bg-[#36a6eb] text-white font-bold text-[16px] rounded-full hover:bg-[#2a8ac7] transition-colors shadow-lg hover:shadow-xl transform hover:scale-105"
+  >
+    Mide tu ansiedad
+  </button>
 </div>
 
 <p-dialog
@@ -64,26 +94,45 @@
   [modal]="true"
   [(visible)]="showForm"
   (onHide)="cancelForm()"
+  [style]="{ width: '30rem' }"
+  [contentStyle]="{ 'max-height': '70vh', 'overflow-y': 'auto' }"
 >
-  <div class="">
+  <div class="px-4 py-2">
     @for(info of dataInfo; track $index){
-    <p class="font-semibold">{{ info.question }}</p>
-    <div class="flex flex-row w-full">
-      @for(option of info.options; track $index) {
-      <p-radioButton
-        name="info{{ info.id }}"
-        [value]="option"
-        [(ngModel)]="info.selectedOption"
-        [label]="option"
-      ></p-radioButton>
-      }
+    <div class="mb-6 pb-4 border-b border-gray-200">
+      <p class="font-semibold mb-3">{{ $index + 1 }}. {{ info.question }}</p>
+      <div class="flex flex-row flex-wrap gap-4">
+        @for(option of info.options; track $index) {
+        <div class="flex flex-row items-center">
+          <p-radioButton
+            name="info{{ info.id }}"
+            [value]="option"
+            [(ngModel)]="info.selectedOption"
+          ></p-radioButton>
+          <label
+            [for]="'option-' + info.id + '-' + $index"
+            class="ml-2 text-[14px] cursor-pointer whitespace-nowrap"
+          >
+            {{ option }}
+          </label>
+        </div>
+        }
+      </div>
     </div>
     }
-    <div class="flex flex-row items-center justify-around mt-4 rounded-md">
-      <button class="bg-blue-900" (click)="showDialogConfirmation = true">
+    <div class="flex flex-row items-center justify-around gap-4 mt-6">
+      <button
+        class="px-6 py-2 bg-[#36a6eb] text-white font-semibold rounded-lg hover:bg-[#2a8ac7] transition-colors"
+        (click)="showDialogConfirmation = true"
+      >
         Guardar
       </button>
-      <button class="bg-red-700" (click)="cancelForm()">Cancelar</button>
+      <button
+        class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors"
+        (click)="cancelForm()"
+      >
+        Cancelar
+      </button>
     </div>
   </div>
 </p-dialog>

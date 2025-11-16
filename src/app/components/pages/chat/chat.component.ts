@@ -96,6 +96,7 @@ export class ChatComponent
             if (this.conversationId) {
               this.chatForm.disable();
               this.listMessages(this.conversationId);
+              this.conversationWasClosed = true;
             }
           }
         } catch (error) {
@@ -128,7 +129,11 @@ export class ChatComponent
   }
 
   ngOnDestroy(): void {
-    if (this.conversationId && !this.hasUserSentMessage) {
+    if (
+      this.conversationId &&
+      !this.hasUserSentMessage &&
+      this.conversationIdStatistics
+    ) {
       this.conversationService
         .deleteConversation(this.conversationId!)
         .subscribe({

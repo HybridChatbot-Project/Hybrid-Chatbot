@@ -371,5 +371,6 @@ export class StatisticsComponent implements OnInit {
       question.selectedOption = null;
     });
     this.showForm = false;
+    this.showDialogConfirmation = false;
   }
 }
