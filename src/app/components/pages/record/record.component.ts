@@ -48,10 +48,10 @@ export class RecordComponent implements OnInit {
               id: x.id,
               createDate:
                 this.datePipe.transform(x.createDate, 'dd-MM-yyyy HH:mm') || '',
-              firstLine: lines[i],
-              grade: x.grade.toString() ?? 'Sin calificación',
+              firstLine: lines[i] || 'Sin mensajes',
+              grade: x.grade ? x.grade.toString() : 'Sin calificación',
               comment: x.comment ?? 'Sin Comentarios',
-              closed: x.isClosed,
+              closed: x.isClosed || false,
             }));
           });
         }

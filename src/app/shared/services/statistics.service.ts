@@ -6,7 +6,7 @@ import { BaseResponse, BaseResponseList } from '../interfaces/Common.inteface';
 import { StatisticsResponse } from '../interfaces/Statistics.interface';
 import { request } from 'http';
 import {
-  ConversationRequest,
+  ConversationCloseRequest,
   ConversationResponse,
 } from '../interfaces/Conversation.interface';
 import {
@@ -59,11 +59,26 @@ export class StatisticsService {
 
   //ConversationEvaluation
   createConversation(
-    data: ConversationRequest
+    userId: number
   ): Observable<BaseResponse<ConversationResponse>> {
     return this.http.post<BaseResponse<ConversationResponse>>(
-      `/create-conversation`,
+      `${this.urlConversation}/create-conversation/${userId}`,
+      {}
+    );
+  }
+
+  closeConversation(
+    data: ConversationCloseRequest
+  ): Observable<BaseResponse<ConversationResponse>> {
+    return this.http.put<BaseResponse<ConversationResponse>>(
+      `${this.urlConversation}/close-conversation`,
       data
+    );
+  }
+
+  deleteConversation(id: number): Observable<BaseResponse<any>> {
+    return this.http.delete<BaseResponse<any>>(
+      `${this.urlConversation}/delete-conversation/${id}`
     );
   }
 

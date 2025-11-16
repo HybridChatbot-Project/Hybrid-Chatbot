@@ -6,6 +6,7 @@ import { MedicResourcesComponent } from './medic-resources/medic-resources.compo
 import { StatisticsComponent } from './statistics/statistics.component';
 import { ChatComponent } from './chat/chat.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ChatDeactivateGuard } from '../../shared/guards/ChatDeactivateGuard.guard';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
   {
     path: 'chat',
     data: { breadcrumb: 'Chat' },
+    canDeactivate: [ChatDeactivateGuard],
     component: ChatComponent,
   },
   {
