@@ -1,3 +1,20 @@
+:host {
+  display: block;
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.invalid input {
+  border: 1px solid #e86a5f;
+  box-shadow: 0 0 0 3px rgba(232, 106, 95, 0.2);
+}
+
 ::ng-deep .p-password {
   width: 300px !important;
   display: flex !important;

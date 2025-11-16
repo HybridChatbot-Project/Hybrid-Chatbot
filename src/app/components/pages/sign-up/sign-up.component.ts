@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CalendarModule } from 'primeng/calendar';
@@ -16,8 +19,32 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { UserRequest } from '../../../shared/interfaces/User.interface';
 import { AuthService } from '../../../shared/services/auth.service';
-import { response } from 'express';
 import { GenreService } from '../../../shared/services/genre.service';
+
+const NAME_REGEX = /^[A-Za-zÁÉÍÓÚÜáéíóúüÑñ\s]+$/;
+const EMAIL_DOT_COM_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.com$/i;
+const PERU_PHONE_REGEX = /^(?:\+?51)?9\d{8}$/;
+
+function validBirthDate(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+
+  const date = value instanceof Date ? value : new Date(value);
+  if (isNaN(date.getTime())) return { invalidDate: true };
+
+  const now = new Date();
+  const minDate = new Date('1900-01-01');
+  if (date < minDate || date > now) return { invalidDate: true };
+
+  return null;
+}
+
+function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.get('password')?.value;
+  const confirm = control.get('confirmPassword')?.value;
+  if (!password || !confirm) return null;
+  return password === confirm ? null : { passwordMismatch: true };
+}
 
 @Component({
   selector: 'app-sign-up',
@@ -50,17 +77,32 @@ export class SignUpComponent implements OnInit {
   showPolicies: boolean = false;
   isAccepted: boolean = false;
 
-  signup = new FormGroup({
-    firstName: new FormControl(),
-    lastName: new FormControl(),
-    birthDate: new FormControl(),
-    genre: new FormControl(),
-    email: new FormControl(),
-    password: new FormControl(),
-    confirmPassword: new FormControl(),
-    phoneNumber: new FormControl(),
-    acceptTerms: new FormControl(false),
-  });
+  signup = new FormGroup(
+    {
+      firstName: new FormControl('', [
+        Validators.required,
+        Validators.pattern(NAME_REGEX),
+      ]),
+      lastName: new FormControl('', [
+        Validators.required,
+        Validators.pattern(NAME_REGEX),
+      ]),
+      birthDate: new FormControl('', [Validators.required, validBirthDate]),
+      genre: new FormControl(null, [Validators.required]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.pattern(EMAIL_DOT_COM_REGEX),
+      ]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', [Validators.required]),
+      phoneNumber: new FormControl('', [
+        Validators.required,
+        Validators.pattern(PERU_PHONE_REGEX),
+      ]),
+      acceptTerms: new FormControl(false, [Validators.requiredTrue]),
+    },
+    { validators: passwordMatchValidator }
+  );
 
   genres: any[] = [
     { id: 1, name: 'Masculino' },
@@ -79,6 +121,44 @@ export class SignUpComponent implements OnInit {
         }
       },
     });
+  }
+
+  showFieldError(controlName: string): boolean {
+    const control = this.signup.get(controlName);
+    return !!control && control.invalid && (control.dirty || control.touched);
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.signup.get(controlName);
+    if (!control) return '';
+
+    if (control.hasError('required')) {
+      if (controlName === 'acceptTerms') {
+        return 'Debes aceptar los términos.';
+      }
+      return 'Este campo es obligatorio.';
+    }
+    if (control.hasError('pattern')) {
+      if (controlName === 'email') return 'El correo debe terminar en .com';
+      if (controlName === 'phoneNumber')
+        return 'Ingresa un celular peruano válido (9 dígitos).';
+      return 'Solo se permiten letras y espacios.';
+    }
+    if (control.hasError('minlength')) {
+      return 'Mínimo 6 caracteres.';
+    }
+    if (control.hasError('invalidDate')) {
+      return 'Ingresa una fecha válida anterior a hoy (dd/mm/aaaa).';
+    }
+    return '';
+  }
+
+  get passwordsDoNotMatch(): boolean {
+    const confirmTouched = this.signup.get('confirmPassword');
+    return (
+      !!this.signup.errors?.['passwordMismatch'] &&
+      !!(confirmTouched?.dirty || confirmTouched?.touched)
+    );
   }
 
   onFileSelected(event: Event): void {
@@ -116,15 +196,16 @@ export class SignUpComponent implements OnInit {
   }
 
   onSignUp(): void {
-    if (
-      this.signup.valid &&
-      this.isAccepted &&
-      this.signup.value.password === this.signup.value.confirmPassword
-    ) {
+    if (this.signup.invalid || this.passwordsDoNotMatch || !this.isAccepted) {
+      this.signup.markAllAsTouched();
+      return;
+    }
+
+    if (this.signup.valid && this.isAccepted) {
       const formRegister: UserRequest = {
         firstName: this.signup.value.firstName!,
         lastName: this.signup.value.lastName!,
-        birthDate: this.signup.value.birthDate!,
+        birthDate: new Date(this.signup.value.birthDate!),
         gender: this.signup.value.genre!,
         email: this.signup.value.email!,
         password: this.signup.value.password!,
@@ -138,8 +219,6 @@ export class SignUpComponent implements OnInit {
           }
         },
       });
-    } else {
-      console.log('El formulario no es válido');
     }
   }
 

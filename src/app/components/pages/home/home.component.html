@@ -1,29 +1,58 @@
-<div
-  class="flex flex-col justify-center items-center w-full h-full overflow-hidden"
->
-  <div class="flex flex-col items-center h-full w-full">
-    <div
-      class="flex flex-col justify-center items-center w-[50%] h-[40%] mt-4 border rounded-xl border-gray-950"
-    >
-      <img
-        src="assets/images/logo.png"
-        alt="Foto de perfil"
-        class="w-1/4 max-w-[160px] h-auto mb-4 block object-contain"
-      />
-      <p class="font-extrabold text-[25px]">Bienvenido {{ name }}!!</p>
-      <p class="font-semibold text-[25px]">¿Que deseas realizar?</p>
-    </div>
-    @for (homeRoute of homeRoutes; track $index) {
-    <div
-      class="flex flex-row justify-start items-center w-[50%] h-[10%] bg-[#BDD7CB] mt-4 border rounded-2xl border-gray-950"
-      [routerLink]="[homeRoute.path]"
-    >
-      <div [innerHTML]="homeRoute.icon" class="text-black p-2"></div>
-      <div class="flex flex-col items-start">
-        <p class="font-bold text-[20px]">{{ homeRoute.title }}</p>
-        <p class="text-[15px]">{{ homeRoute.subtitle }}</p>
+<section class="home-wrapper">
+  <div class="hero-card">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Tu espacio de calma</p>
+      <h1>Hola, {{ name }} <span class="wave" aria-hidden="true">👋</span></h1>
+      <p class="hero-copy">
+        Explora el chatbot, revisa tu progreso o encuentra recursos guiados.
+        Todo está diseñado para acompañarte paso a paso.
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" type="button" [routerLink]="['/hybridchatbot/chat']">
+          Ir al chat
+        </button>
+        <button class="btn btn-secondary" type="button" [routerLink]="['/hybridchatbot/resources']">
+          Ver recursos
+        </button>
       </div>
     </div>
-    }
+    <div class="hero-illustration" aria-hidden="true">
+      <img src="assets/images/logo.png" alt="Ilustración chatbot" />
+      <div class="illustration-glow"></div>
+    </div>
   </div>
-</div>
+
+  <section class="suggestions">
+    <header class="section-header">
+      <p class="section-eyebrow">Recomendaciones rápidas</p>
+      <h2>Pequeños recordatorios para hoy</h2>
+    </header>
+    <div class="suggestions-grid">
+      @for (tip of mindfulSuggestions; track $index) {
+      <article class="suggestion-card">
+        <h3>{{ tip.title }}</h3>
+        <p>{{ tip.description }}</p>
+      </article>
+      }
+    </div>
+  </section>
+
+  <section class="actions">
+    <header class="section-header">
+      <p class="section-eyebrow">Explora las secciones</p>
+      <h2>¿Qué deseas realizar?</h2>
+      <p>Selecciona una opción para continuar tu experiencia.</p>
+    </header>
+    <div class="actions-grid">
+      @for (homeRoute of homeRoutes; track $index) {
+      <button class="action-card" type="button" [routerLink]="[homeRoute.path]">
+        <span class="action-icon" [innerHTML]="homeRoute.icon"></span>
+        <span class="action-copy">
+          <span class="action-title">{{ homeRoute.title }}</span>
+          <span class="action-subtitle">{{ homeRoute.subtitle }}</span>
+        </span>
+      </button>
+      }
+    </div>
+  </section>
+</section>
