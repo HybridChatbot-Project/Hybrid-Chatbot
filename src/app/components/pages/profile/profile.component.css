@@ -1,0 +1,301 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.profile-shell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2.5rem clamp(1.5rem, 4vw, 3rem);
+  background: #f4f8f6;
+  border-radius: 32px;
+  min-height: 100%;
+}
+
+.identity-card,
+.profile-form-card {
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 2rem;
+  box-shadow: 0 30px 60px rgba(15, 47, 50, 0.12);
+}
+
+.identity-card {
+  flex: 1 1 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+:host ::ng-deep .avatar-image img {
+  border-radius: 24px;
+  border: 4px solid #e0f4f1;
+  box-shadow: 0 20px 45px rgba(16, 91, 99, 0.2);
+}
+
+.avatar-upload {
+  font-weight: 600;
+  color: #0f5b60;
+  background: rgba(15, 91, 96, 0.08);
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.avatar-upload:hover {
+  background: rgba(15, 91, 96, 0.15);
+}
+
+.identity-meta h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: #102f34;
+}
+
+.identity-meta p {
+  margin: 0;
+  color: #5d7370;
+}
+
+.identity-badges {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.identity-badges li {
+  background: #f2f9f7;
+  border-radius: 20px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.identity-badges span {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6c8c8a;
+}
+
+.identity-badges strong {
+  font-size: 1.1rem;
+  color: #12343a;
+}
+
+.profile-form-card {
+  flex: 2 1 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.section-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  color: #6c8c8a;
+}
+
+.section-header h2 {
+  margin: 0;
+  color: #0f2f34;
+}
+
+.section-header p {
+  margin: 0;
+  color: #55706d;
+}
+
+.profile-grid,
+.dialog-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.info-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.info-item {
+  background: #f7fbfa;
+  border: 1px solid #e2ebe7;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 12px 25px rgba(15, 47, 50, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.info-item .label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6c8c8a;
+  font-weight: 600;
+}
+
+.info-item .value {
+  font-size: 1.05rem;
+  color: #0f2f34;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: #244448;
+}
+
+.field input {
+  border: 1px solid #d5e5df;
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  font-weight: 500;
+  color: #0f2f34;
+  background: #fdfefe;
+  box-shadow: 0 12px 25px rgba(15, 47, 50, 0.06);
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #36a6eb;
+  box-shadow: 0 0 0 3px rgba(54, 166, 235, 0.15);
+}
+
+.field.invalid input {
+  border-color: #e86a5f;
+  box-shadow: 0 0 0 3px rgba(232, 106, 95, 0.2);
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: #c0392b;
+  font-weight: 500;
+}
+
+:host ::ng-deep .field .p-inputtext,
+:host ::ng-deep .field .p-dropdown-label {
+  border: 1px solid #d5e5df;
+  border-radius: 16px;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  color: #0f2f34;
+  background: #fdfefe;
+  box-shadow: 0 12px 25px rgba(15, 47, 50, 0.06);
+}
+
+:host ::ng-deep .field.invalid .p-inputtext,
+:host ::ng-deep .field.invalid .p-dropdown,
+:host ::ng-deep .field.invalid .p-dropdown-label,
+:host ::ng-deep .field.invalid .profile-calendar-input {
+  border-color: #e86a5f !important;
+  box-shadow: 0 0 0 3px rgba(232, 106, 95, 0.2) !important;
+}
+
+:host ::ng-deep .field .p-inputtext:focus,
+:host ::ng-deep .field .p-dropdown:not(.p-disabled).p-focus {
+  outline: none;
+  border-color: #36a6eb;
+  box-shadow: 0 0 0 3px rgba(54, 166, 235, 0.15);
+}
+
+.actions,
+.dialog-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.dialog-body {
+  padding-top: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .profile-calendar {
+  width: 100%;
+}
+
+:host ::ng-deep .profile-calendar .p-inputtext,
+:host ::ng-deep .p-dropdown .p-inputtext {
+  width: 100%;
+}
+
+:host ::ng-deep .p-datepicker {
+  min-width: 320px;
+}
+
+:host ::ng-deep .p-datepicker-header {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+:host ::ng-deep .p-datepicker-title {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+:host ::ng-deep .p-datepicker-prev,
+:host ::ng-deep .p-datepicker-next {
+  display: inline-flex !important;
+}
+
+:host ::ng-deep .profile-calendar-input {
+  border-radius: 16px !important;
+  border: 1px solid #d5e5df !important;
+  padding: 0.75rem 1rem !important;
+  background: #fdfefe !important;
+  color: #0f2f34 !important;
+  font-weight: 500 !important;
+  box-shadow: 0 12px 25px rgba(15, 47, 50, 0.06);
+}
+
+:host ::ng-deep .p-dropdown {
+  width: 100%;
+  border: none;
+  box-shadow: 0 12px 25px rgba(15, 47, 50, 0.06);
+  border-radius: 16px;
+}
+
+:host ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background: #e6f7f4;
+  color: #0f5b60;
+}
+
+@media (max-width: 768px) {
+  .profile-shell {
+    padding: 1.5rem;
+  }
+}

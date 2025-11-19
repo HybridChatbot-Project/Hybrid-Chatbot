@@ -1,0 +1,30 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+>
+  <div class="flex flex-col w-full items-center justify-center p-4">
+    <div class="w-full text-center">
+      <p class="font-bold text-[25px] text-gray-800">{{ title }}</p>
+      <p *ngIf="description.length > 0" class="text-gray-700 mt-2">
+        {{ description }}
+      </p>
+    </div>
+
+    <div class="flex flex-row justify-center items-center mt-5">
+      <button
+        pButton
+        label="Confirmar"
+        class="bg-[#36A6EB] px-10 py-2 mr-4 rounded-xl text-white font-bold"
+        (click)="onConfirm()"
+      ></button>
+      <button
+        pButton
+        label="Cancelar"
+        class="bg-red-700 px-9 py-2 rounded-xl text-white font-bold"
+        (click)="onCancel()"
+      ></button>
+    </div>
+  </div>
+</p-dialog>

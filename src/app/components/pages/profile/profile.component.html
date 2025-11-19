@@ -1,1 +1,232 @@
-<p>profile works!</p>
+<form [formGroup]="profileForm">
+  <section class="profile-shell">
+    <article class="identity-card">
+      <div class="avatar-wrapper">
+        <p-image
+          [src]="selectedImage || 'assets/images/logo.png'"
+          alt="Foto de perfil"
+          width="220"
+          height="220"
+          styleClass="avatar-image"
+          class="block max-w-[350px] max-h-[350px] object-contain"
+        ></p-image>
+        <label class="avatar-upload">
+          Cambiar foto
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            hidden
+          />
+        </label>
+      </div>
+      <div class="identity-meta">
+        <h1 formControlName="firstName">
+          {{ profileForm.get("firstName")?.value || "Usuario" }}
+          {{ profileForm.get("lastName")?.value || "" }}
+        </h1>
+        <p>{{ profileForm.get("email")?.value || "Sin correo disponible" }}</p>
+      </div>
+      <ul class="identity-badges">
+        <li>
+          <span>Celular</span>
+          <strong>{{ phoneNumberDisplay }}</strong>
+        </li>
+        <li>
+          <span>Fecha de nacimiento</span>
+          <strong>{{ birthDateDisplay }}</strong>
+        </li>
+        <li>
+          <span>Género</span>
+          <strong>{{ selectedGenreLabel }}</strong>
+        </li>
+      </ul>
+    </article>
+
+    <article class="profile-form-card">
+      <header class="section-header">
+        <p class="section-eyebrow">Información personal</p>
+        <h2>Gestiona tus datos</h2>
+        <p>
+          Estos datos se sincronizan con tu cuenta para personalizar la
+          experiencia.
+        </p>
+      </header>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Nombres</span>
+          <span class="value">{{
+            profileForm.get("firstName")?.value || "—"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Apellidos</span>
+          <span class="value">{{
+            profileForm.get("lastName")?.value || "—"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Email</span>
+          <span class="value">{{
+            profileForm.get("email")?.value || "—"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Fecha de nacimiento</span>
+          <span class="value">{{ birthDateDisplay }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Celular</span>
+          <span class="value">{{ phoneNumberDisplay }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Género</span>
+          <span class="value">{{ selectedGenreLabel }}</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button
+          pButton
+          label="Editar"
+          class="p-button-rounded p-button-success"
+          (click)="editModal('editar')"
+        ></button>
+        <button
+          pButton
+          label="Eliminar"
+          class="p-button-rounded p-button-text p-button-danger"
+          (click)="editModal('eliminar')"
+        ></button>
+      </div>
+    </article>
+  </section>
+</form>
+<p-dialog
+  [(visible)]="showEditForm"
+  [modal]="true"
+  header="Edita tu información"
+  [style]="{ width: '720px' }"
+  [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
+>
+  <div class="dialog-body">
+    <form [formGroup]="editForm" class="dialog-grid">
+      <label
+        class="field"
+        [class.invalid]="showFieldError(editForm, 'firstName')"
+      >
+        <span>Nombres</span>
+        <input
+          type="text"
+          placeholder="Ingrese sus nombres"
+          formControlName="firstName"
+        />
+        <span class="field-error" *ngIf="showFieldError(editForm, 'firstName')">
+          {{ getErrorMessage(editForm, "firstName") }}
+        </span>
+      </label>
+      <label
+        class="field"
+        [class.invalid]="showFieldError(editForm, 'lastName')"
+      >
+        <span>Apellidos</span>
+        <input
+          type="text"
+          placeholder="Ingrese sus apellidos"
+          formControlName="lastName"
+        />
+        <span class="field-error" *ngIf="showFieldError(editForm, 'lastName')">
+          {{ getErrorMessage(editForm, "lastName") }}
+        </span>
+      </label>
+      <label class="field" [class.invalid]="showFieldError(editForm, 'email')">
+        <span>Email</span>
+        <input
+          type="email"
+          placeholder="Ingrese su email"
+          formControlName="email"
+        />
+        <span class="field-error" *ngIf="showFieldError(editForm, 'email')">
+          {{ getErrorMessage(editForm, "email") }}
+        </span>
+      </label>
+      <label
+        class="field"
+        [class.invalid]="showFieldError(editForm, 'phoneNumber')"
+      >
+        <span>Celular</span>
+        <input
+          type="tel"
+          placeholder="Ingrese su celular"
+          formControlName="phoneNumber"
+        />
+        <span
+          class="field-error"
+          *ngIf="showFieldError(editForm, 'phoneNumber')"
+        >
+          {{ getErrorMessage(editForm, "phoneNumber") }}
+        </span>
+      </label>
+      <label
+        class="field"
+        [class.invalid]="showFieldError(editForm, 'birthDate')"
+      >
+        <span>Fecha de nacimiento</span>
+        <input
+          type="text"
+          formControlName="birthDate"
+          placeholder="dd/mm/aaaa"
+          inputmode="numeric"
+        />
+        <span class="field-error" *ngIf="showFieldError(editForm, 'birthDate')">
+          {{ getErrorMessage(editForm, "birthDate") }}
+        </span>
+      </label>
+      <label class="field" [class.invalid]="showFieldError(editForm, 'genre')">
+        <span>Género</span>
+        <p-dropdown
+          [options]="genres"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="genre"
+          placeholder="Seleccione su género"
+        ></p-dropdown>
+        <span class="field-error" *ngIf="showFieldError(editForm, 'genre')">
+          {{ getErrorMessage(editForm, "genre") }}
+        </span>
+      </label>
+      <label class="field">
+        <span>Contraseña (opcional)</span>
+        <input
+          type="password"
+          placeholder="Actualiza tu contraseña"
+          formControlName="password"
+        />
+      </label>
+    </form>
+  </div>
+  <div class="dialog-actions">
+    <button
+      pButton
+      label="Guardar"
+      class="p-button-rounded p-button-success"
+      (click)="showConfirmationDialog = true"
+      [disabled]="editForm.invalid"
+    ></button>
+    <button
+      pButton
+      label="Cancelar"
+      class="p-button-rounded p-button-text"
+      (click)="showEditForm = false"
+    ></button>
+  </div>
+</p-dialog>
+
+<app-confirmation-dialog
+  [(visible)]="showConfirmationDialog"
+  [title]="contentDialog.title"
+  [description]="contentDialog.description"
+  (confirm)="switchActionDialog()"
+  (cancel)="showConfirmationDialog = false"
+></app-confirmation-dialog>

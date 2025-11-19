@@ -1,5 +1,66 @@
-<p>home works!</p>
-<button [routerLink]="['/hybridchatbot/chat']">Chat</button>
-<button [routerLink]="['/hybridchatbot/record']">Historial</button>
-<button [routerLink]="['/hybridchatbot/resources']">Recursos</button>
-<button [routerLink]="['/hybridchatbot/statistics']">Estadisticas</button>
+<section class="home-wrapper">
+  <div class="hero-card">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Tu espacio de calma</p>
+      <h1>Hola, {{ name }} <span class="wave" aria-hidden="true">👋</span></h1>
+      <p class="hero-copy">
+        Explora el chatbot, revisa tu progreso o encuentra recursos guiados.
+        Todo está diseñado para acompañarte paso a paso.
+      </p>
+      <div class="hero-actions">
+        <button
+          class="btn btn-primary"
+          type="button"
+          [routerLink]="['/hybridchatbot/chat']"
+        >
+          Ir al chat
+        </button>
+        <button
+          class="btn btn-secondary"
+          type="button"
+          [routerLink]="['/hybridchatbot/resources']"
+        >
+          Ver recursos
+        </button>
+      </div>
+    </div>
+    <div class="hero-illustration" aria-hidden="true">
+      <img src="assets/images/logo.png" alt="Ilustración chatbot" />
+      <div class="illustration-glow"></div>
+    </div>
+  </div>
+
+  <section class="suggestions">
+    <header class="section-header">
+      <p class="section-eyebrow">Recomendaciones rápidas</p>
+      <h2>Pequeños recordatorios para hoy</h2>
+    </header>
+    <div class="suggestions-grid">
+      @for (tip of mindfulSuggestions; track $index) {
+      <article class="suggestion-card">
+        <h3>{{ tip.title }}</h3>
+        <p>{{ tip.description }}</p>
+      </article>
+      }
+    </div>
+  </section>
+
+  <section class="actions">
+    <header class="section-header">
+      <p class="section-eyebrow">Explora las secciones</p>
+      <h2>¿Qué deseas realizar?</h2>
+      <p>Selecciona una opción para continuar tu experiencia.</p>
+    </header>
+    <div class="actions-grid">
+      @for (homeRoute of homeRoutes; track $index) {
+      <button class="action-card" type="button" [routerLink]="[homeRoute.path]">
+        <span class="action-icon" [innerHTML]="homeRoute.icon"></span>
+        <span class="action-copy">
+          <span class="action-title">{{ homeRoute.title }}</span>
+          <span class="action-subtitle">{{ homeRoute.subtitle }}</span>
+        </span>
+      </button>
+      }
+    </div>
+  </section>
+</section>
