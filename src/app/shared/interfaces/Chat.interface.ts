@@ -16,4 +16,5 @@ export interface MessageRequest {
   conversationId: number;
   sequence: number;
   senderType: string;
+  userName?: string;
 }

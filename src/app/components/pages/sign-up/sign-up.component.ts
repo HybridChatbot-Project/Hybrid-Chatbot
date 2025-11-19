@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CalendarModule } from 'primeng/calendar';
@@ -16,10 +19,37 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { UserRequest } from '../../../shared/interfaces/User.interface';
 import { AuthService } from '../../../shared/services/auth.service';
-import { response } from 'express';
 import { GenreService } from '../../../shared/services/genre.service';
 import { CluodinaryService } from '../../../shared/services/cluodinary.service';
 import { error } from 'console';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
+
+const NAME_REGEX = /^[A-Za-zÁÉÍÓÚÜáéíóúüÑñ\s]+$/;
+const EMAIL_DOT_COM_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.com$/i;
+const PERU_PHONE_REGEX = /^(?:\+?51)?9\d{8}$/;
+
+function validBirthDate(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+
+  const date = value instanceof Date ? value : new Date(value);
+  if (isNaN(date.getTime())) return { invalidDate: true };
+
+  const now = new Date();
+  const minDate = new Date('1900-01-01');
+  if (date < minDate || date > now) return { invalidDate: true };
+
+  return null;
+}
+
+function passwordMatchValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  const password = control.get('password')?.value;
+  const confirm = control.get('confirmPassword')?.value;
+  if (!password || !confirm) return null;
+  return password === confirm ? null : { passwordMismatch: true };
+}
 
 @Component({
   selector: 'app-sign-up',
@@ -41,14 +71,6 @@ import { error } from 'console';
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private genreService: GenreService,
-    private cloudinaryService: CluodinaryService
-  ) {}
-
   selectedImage?: string;
   selectedFile?: File;
   showPolicies: boolean = false;
@@ -56,24 +78,77 @@ export class SignUpComponent implements OnInit {
   isUploading: boolean = false;
   uploadProgress: number = 0;
 
-  signup = new FormGroup({
-    firstName: new FormControl(),
-    lastName: new FormControl(),
-    birthDate: new FormControl(),
-    genre: new FormControl(),
-    email: new FormControl(),
-    password: new FormControl(),
-    confirmPassword: new FormControl(),
-    phoneNumber: new FormControl(),
-    acceptTerms: new FormControl(false),
-  });
+  signup = new FormGroup(
+    {
+      firstName: new FormControl('', [
+        Validators.required,
+        Validators.pattern(NAME_REGEX),
+      ]),
+      lastName: new FormControl('', [
+        Validators.required,
+        Validators.pattern(NAME_REGEX),
+      ]),
+      birthDate: new FormControl('', [Validators.required, validBirthDate]),
+      genre: new FormControl(null, [Validators.required]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.pattern(EMAIL_DOT_COM_REGEX),
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      confirmPassword: new FormControl('', [Validators.required]),
+      phoneNumber: new FormControl('', [
+        Validators.required,
+        Validators.pattern(PERU_PHONE_REGEX),
+      ]),
+      acceptTerms: new FormControl(false, [Validators.requiredTrue]),
+    },
+    { validators: passwordMatchValidator }
+  );
 
   genres: any[] = [
     { id: 1, name: 'Masculino' },
     { id: 2, name: 'Femenino' },
   ];
 
+  es = {
+    firstDayOfWeek: 1,
+    dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+    dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+    dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+    monthNames: [
+      'enero',
+      'febrero',
+      'marzo',
+      'abril',
+      'mayo',
+      'junio',
+      'julio',
+      'agosto',
+      'septiembre',
+      'octubre',
+      'noviembre',
+      'diciembre',
+    ],
+    monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+    today: 'Hoy',
+    clear: 'Limpiar',
+  };
+
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private router: Router,
+    private route: ActivatedRoute,
+    private genreService: GenreService,
+    private authService: AuthService,
+    private cloudinaryService: CluodinaryService,
+    private messageService: MessageService
+  ) {}
+
   ngOnInit(): void {
+    this.primengConfig.setTranslation(this.es);
     this.listGenres();
   }
 
@@ -85,6 +160,44 @@ export class SignUpComponent implements OnInit {
         }
       },
     });
+  }
+
+  showFieldError(controlName: string): boolean {
+    const control = this.signup.get(controlName);
+    return !!control && control.invalid && (control.dirty || control.touched);
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.signup.get(controlName);
+    if (!control) return '';
+
+    if (control.hasError('required')) {
+      if (controlName === 'acceptTerms') {
+        return 'Debes aceptar los términos.';
+      }
+      return 'Este campo es obligatorio.';
+    }
+    if (control.hasError('pattern')) {
+      if (controlName === 'email') return 'El correo debe terminar en .com';
+      if (controlName === 'phoneNumber')
+        return 'Ingresa un celular peruano válido (9 dígitos).';
+      return 'Solo se permiten letras y espacios.';
+    }
+    if (control.hasError('minlength')) {
+      return 'Mínimo 6 caracteres.';
+    }
+    if (control.hasError('invalidDate')) {
+      return 'Ingresa una fecha válida anterior a hoy (dd/mm/aaaa).';
+    }
+    return '';
+  }
+
+  get passwordsDoNotMatch(): boolean {
+    const confirmTouched = this.signup.get('confirmPassword');
+    return (
+      !!this.signup.errors?.['passwordMismatch'] &&
+      !!(confirmTouched?.dirty || confirmTouched?.touched)
+    );
   }
 
   onFileSelected(event: Event): void {
@@ -146,12 +259,16 @@ export class SignUpComponent implements OnInit {
           .subscribe({
             next: (response) => {
               console.log('Imagen subida a Cloudinary:', response);
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Imagen subida',
+                detail: 'La imagen de tu perfil se ha subido correctamente.',
+              });
               this.registerUser(response.secure_url, response.public_id);
             },
             error: (error) => {
               console.error('Error al subir imagen:', error);
               this.isUploading = false;
-              alert('Error al subir la imagen. Intenta nuevamente.');
             },
           });
       } else {
@@ -164,7 +281,7 @@ export class SignUpComponent implements OnInit {
     const formRegister: UserRequest = {
       firstName: this.signup.value.firstName!,
       lastName: this.signup.value.lastName!,
-      birthDate: this.signup.value.birthDate!,
+      birthDate: new Date(this.signup.value.birthDate!),
       gender: this.signup.value.genre!,
       email: this.signup.value.email!,
       password: this.signup.value.password!,
@@ -177,13 +294,22 @@ export class SignUpComponent implements OnInit {
         this.isUploading = false;
         if (response.status_code === 200) {
           console.log('Usuario registrado con éxito');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Registro exitoso',
+            detail: 'Tu cuenta ha sido creada correctamente.',
+          });
           this.goToLogin();
         }
       },
       error: (error) => {
         this.isUploading = false;
         console.error('Error al registrar usuario:', error);
-        alert('Error al registrar el usuario. Intenta nuevamente.');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error en el registro',
+          detail: error.error || 'Ocurrió un error al registrar el usuario.',
+        });
       },
     });
   }

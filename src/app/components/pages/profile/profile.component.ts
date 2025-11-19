@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Button, ButtonModule } from 'primeng/button';
@@ -21,6 +24,61 @@ import {
   UserRequest,
 } from '../../../shared/interfaces/User.interface';
 import { CluodinaryService } from '../../../shared/services/cluodinary.service';
+import { MessageService } from 'primeng/api';
+
+type GenreOption = { id: number; name: string };
+
+const NAME_REGEX = /^[A-Za-zÁÉÍÓÚÜáéíóúüÑñ\s]+$/;
+const EMAIL_DOT_COM_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.com$/i;
+const PERU_PHONE_REGEX = /^(?:\+?51)?9\d{8}$/;
+
+function parseDateInput(value: any): Date | null {
+  if (!value) return null;
+
+  if (value instanceof Date) return value;
+
+  if (typeof value === 'string') {
+    const parts = value.split(/[\/\-]/).map((p) => p.trim());
+    if (parts.length === 3) {
+      const [dd, mm, yyyy] = parts;
+      const day = Number(dd);
+      const month = Number(mm) - 1;
+      const year = Number(yyyy);
+      const date = new Date(year, month, day);
+      if (
+        !isNaN(date.getTime()) &&
+        date.getDate() === day &&
+        date.getMonth() === month &&
+        date.getFullYear() === year
+      ) {
+        return date;
+      }
+    }
+  }
+
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+function validBirthDate(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) {
+    return null;
+  }
+
+  const date = parseDateInput(value);
+  if (!date) {
+    return { invalidDate: true };
+  }
+
+  const now = new Date();
+  const minDate = new Date('1900-01-01');
+  if (date < minDate || date > now) {
+    return { invalidDate: true };
+  }
+
+  return null;
+}
 
 @Component({
   selector: 'app-profile',
@@ -55,43 +113,82 @@ export class ProfileComponent implements OnInit {
   };
 
   profileForm: FormGroup = new FormGroup({
-    firstName: new FormControl(),
-    lastName: new FormControl(),
-    email: new FormControl(),
-    phoneNumber: new FormControl(),
-    birthDate: new FormControl(),
-    genre: new FormControl(),
+    firstName: new FormControl('', [
+      Validators.required,
+      Validators.pattern(NAME_REGEX),
+    ]),
+    lastName: new FormControl('', [
+      Validators.required,
+      Validators.pattern(NAME_REGEX),
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern(EMAIL_DOT_COM_REGEX),
+    ]),
+    phoneNumber: new FormControl('', [
+      Validators.required,
+      Validators.pattern(PERU_PHONE_REGEX),
+    ]),
+    birthDate: new FormControl('', [Validators.required, validBirthDate]),
+    genre: new FormControl(null, [Validators.required]),
   });
 
   editForm: FormGroup = new FormGroup({
-    firstName: new FormControl(),
-    lastName: new FormControl(),
-    email: new FormControl(),
-    phoneNumber: new FormControl(),
-    birthDate: new FormControl(),
-    genre: new FormControl(),
-    password: new FormControl(),
+    firstName: new FormControl('', [
+      Validators.required,
+      Validators.pattern(NAME_REGEX),
+    ]),
+    lastName: new FormControl('', [
+      Validators.required,
+      Validators.pattern(NAME_REGEX),
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern(EMAIL_DOT_COM_REGEX),
+    ]),
+    phoneNumber: new FormControl('', [
+      Validators.required,
+      Validators.pattern(PERU_PHONE_REGEX),
+    ]),
+    birthDate: new FormControl('', [Validators.required, validBirthDate]),
+    genre: new FormControl(null, [Validators.required]),
+    password: new FormControl('', []),
   });
 
   constructor(
     private userService: UserService,
     private genreService: GenreService,
-    private cloudinaryService: CluodinaryService
+    private cloudinaryService: CluodinaryService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.profileForm.disable();
+    this.profileForm.controls['genre'].enable();
     this.listGenres();
     this.loadUserProfile(this.userId);
   }
 
-  genres: any[] = [];
+  private readonly fallbackGenres: GenreOption[] = [
+    { id: 1, name: 'Masculino' },
+    { id: 2, name: 'Femenino' },
+  ];
+  genres: GenreOption[] = [...this.fallbackGenres];
   listGenres(): void {
     this.genreService.listGenres().subscribe({
       next: (response) => {
         if (response.status_code === 200) {
-          this.genres = response.data.map((x) => ({ id: x.id, name: x.genre }));
+          const apiGenres = response.data
+            ?.map((x: any) => ({ id: x.id, name: x.genre }))
+            .filter((item: GenreOption) => !!item.name);
+
+          this.genres = apiGenres?.length
+            ? apiGenres
+            : [...this.fallbackGenres];
         }
+      },
+      error: () => {
+        this.genres = [...this.fallbackGenres];
       },
     });
   }
@@ -147,7 +244,7 @@ export class ProfileComponent implements OnInit {
       firstName: this.editForm.value.firstName,
       lastName: this.editForm.value.lastName,
       email: this.editForm.value.email,
-      birthDate: this.editForm.value.birthDate,
+      birthDate: parseDateInput(this.editForm.value.birthDate) || new Date(),
       phoneNumber: this.editForm.value.phoneNumber,
       password: this.editForm.value.password,
       gender: this.editForm.value.genre,
@@ -156,7 +253,16 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Profile updated');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Perfil modificado',
+            detail: 'Los datos de tu perfil se han actualizado correctamente.',
+          });
+          this.loadUserProfile(this.userId);
         }
+      },
+      error(err) {
+        console.error('❌ Error al actualizar el perfil:', err);
       },
     });
   }
@@ -166,6 +272,15 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Profile deleted');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Perfil eliminado',
+            detail: 'Su perfil se ha eliminado correctamente.',
+          });
+          localStorage.clear();
+          setTimeout(() => {
+            window.location.href = '/auth/login';
+          }, 2000);
         }
       },
     });
@@ -239,7 +354,9 @@ export class ProfileComponent implements OnInit {
             response.data?.phoneNumber
           );
           this.editForm.controls['birthDate'].setValue(
-            new Date(response.data?.birthDate || '')
+            this.formatDateDayMonthYear(
+              new Date(response.data?.birthDate || '')
+            )
           );
           this.editForm.controls['genre'].setValue(response.data?.genre.id);
         }
@@ -258,8 +375,79 @@ export class ProfileComponent implements OnInit {
         if (response.status_code == 200) {
           console.log('Imagen de perfil actualizada en el servidor');
           this.loadUserProfile(this.userId);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Imagen actualizada',
+            detail: 'La imagen de tu perfil se ha actualizado correctamente.',
+          });
         }
       },
     });
+  }
+
+  get phoneNumberDisplay(): string {
+    return this.profileForm.get('phoneNumber')?.value || '—';
+  }
+
+  get birthDateDisplay(): string {
+    const date = this.profileForm.get('birthDate')?.value;
+    if (!date) {
+      return '—';
+    }
+
+    try {
+      const parsed = parseDateInput(date);
+      if (!parsed) return '—';
+      return new Intl.DateTimeFormat('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(parsed);
+    } catch {
+      return '—';
+    }
+  }
+
+  private formatDateDayMonthYear(date: Date): string {
+    if (!date || isNaN(date.getTime())) return '';
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const yyyy = date.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }
+
+  get selectedGenreLabel(): string {
+    const genreId = this.profileForm.value.genre;
+    const genre = this.genres.find((g) => g.id === genreId);
+    return genre ? genre.name : '—';
+  }
+
+  showFieldError(form: FormGroup, controlName: string): boolean {
+    const control = form.get(controlName);
+    return control! && control.invalid && (control.dirty || control.touched);
+  }
+
+  getErrorMessage(form: FormGroup, controlName: string): string {
+    const control = form.get(controlName);
+    if (!control) {
+      return '';
+    }
+
+    if (control.hasError('required')) {
+      return 'Este campo es obligatorio.';
+    }
+    if (control.hasError('pattern')) {
+      if (controlName === 'email') {
+        return 'El correo debe terminar en .com';
+      }
+      if (controlName === 'phoneNumber') {
+        return 'Ingresa un celular peruano válido (9 dígitos).';
+      }
+      return 'Solo se permiten letras y espacios.';
+    }
+    if (control.hasError('invalidDate')) {
+      return 'Ingresa una fecha válida (dd/mm/aaaa) anterior a hoy.';
+    }
+    return '';
   }
 }

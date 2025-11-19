@@ -1,6 +1,4 @@
-<div
-  class="flex flex-col items-center justify-start min-h-screen overflow-hidden mt-4"
->
+<div class="flex flex-col min-h-screen items-center px-4 pb-8 pt-6">
   <div class="w-full flex items-center justify-center mb-6 relative">
     <i
       class="pi pi-arrow-left absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-700 cursor-pointer hover:text-[#468999] transition-colors"
@@ -8,29 +6,44 @@
     ></i>
     <p class="text-[3vh] font-bold">Registro</p>
   </div>
-  <div class="flex flex-wrap w-full">
-    <div class="w-[35%] flex flex-col justify-center">
-      <div class="flex flex-col items-center">
+
+  <div
+    class="w-full max-w-5xl bg-white/70 backdrop-blur-sm shadow-xl rounded-2xl border border-gray-100 p-4 sm:p-6 md:p-8"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+      <div
+        class="md:col-span-1 flex flex-col items-center gap-3 md:justify-center md:self-center"
+      >
         <p-image
           *ngIf="selectedImage"
           [src]="selectedImage"
           alt="Imagen seleccionada"
-          width="400"
-          height="400"
-          class="block object-contain"
+          width="320"
+          height="320"
+          class="block object-contain w-full max-w-xs"
         ></p-image>
-        <input
-          type="file"
-          class="bg-[#468999] font-bold rounded-md"
-          (change)="onFileSelected($event)"
-          accept="image/*"
-        />
+        <label
+          class="w-full max-w-xs bg-[#468999] text-white font-bold rounded-md px-4 py-3 text-center cursor-pointer hover:bg-[#3b7a89] transition-colors"
+        >
+          Sube una foto de perfil
+          <input
+            type="file"
+            class="hidden"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+          />
+        </label>
+        <p class="text-sm text-gray-700 text-center max-w-xs">
+          Formatos aceptados: JPG, PNG, WebP. Peso máximo recomendado: 2 MB.
+        </p>
       </div>
-    </div>
-    <div class="w-[65%] flex item justify-center">
-      <div>
-        <form [formGroup]="signup" class="grid grid-cols-2 gap-4">
-          <div class="w-full">
+
+      <div class="md:col-span-2">
+        <form
+          [formGroup]="signup"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
+          <div class="w-full" [class.invalid]="showFieldError('firstName')">
             <p class="font-bold text-gray-800">Nombres:</p>
             <input
               type="text"
@@ -38,8 +51,11 @@
               placeholder="Ingrese sus nombres"
               formControlName="firstName"
             />
+            <span class="field-error" *ngIf="showFieldError('firstName')">
+              {{ getErrorMessage("firstName") }}
+            </span>
           </div>
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('lastName')">
             <p class="font-bold text-gray-800">Apellidos:</p>
             <input
               type="text"
@@ -47,22 +63,35 @@
               placeholder="Ingrese sus apellidos"
               formControlName="lastName"
             />
+            <span class="field-error" *ngIf="showFieldError('lastName')">
+              {{ getErrorMessage("lastName") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('birthDate')">
             <p class="font-bold text-gray-800">Fecha de Nacimiento:</p>
-            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 w-full">
               <p-calendar
                 formControlName="birthDate"
                 dateFormat="dd-mm-yy"
                 placeholder="Seleccione una fecha"
+                [showIcon]="true"
+                [showButtonBar]="true"
+                [monthNavigator]="true"
+                [yearNavigator]="true"
+                yearRange="1920:2100"
+                [touchUI]="false"
+                [locale]="es"
                 inputStyleClass="bg-[#8DD0E1] focus:outline-none w-full placeholder-white"
-                styleClass="w-full flex items-center"
+                styleClass="w-full"
               />
             </div>
+            <span class="field-error" *ngIf="showFieldError('birthDate')">
+              {{ getErrorMessage("birthDate") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('genre')">
             <p class="font-bold text-gray-800">Género</p>
             <div class="bg-[#8DD0E1] rounded-md flex items-center">
               <p-dropdown
@@ -73,12 +102,15 @@
                 formControlName="genre"
                 placeholder="Seleccione su género"
                 inputStyleClass="bg-gray-300 focus:outline-none placeholder-white"
-                styleClass="w-full flex items-center"
+                styleClass="w-full"
               />
             </div>
+            <span class="field-error" *ngIf="showFieldError('genre')">
+              {{ getErrorMessage("genre") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('email')">
             <p class="font-bold text-gray-800">Correo:</p>
             <input
               type="text"
@@ -86,48 +118,69 @@
               placeholder="Ingrese su correo"
               formControlName="email"
             />
+            <span class="field-error" *ngIf="showFieldError('email')">
+              {{ getErrorMessage("email") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('phoneNumber')">
             <p class="font-bold text-gray-800">Teléfono:</p>
             <input
-              type="number"
+              type="text"
               class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
-              placeholder="Ingrese su correo"
+              placeholder="Ingresa tu número"
               formControlName="phoneNumber"
             />
+            <span class="field-error" *ngIf="showFieldError('phoneNumber')">
+              {{ getErrorMessage("phoneNumber") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('password')">
             <p class="font-bold text-gray-800">Contraseña:</p>
-            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 w-full">
               <p-password
                 formControlName="password"
                 [toggleMask]="true"
                 [feedback]="false"
                 placeholder="Ingrese su contraseña"
-                inputStyleClass="bg-[#8DD0E1] focus:outline-none placeholder-white"
-                styleClass="w-full flex items-center"
+                inputStyleClass="bg-[#8DD0E1] focus:outline-none placeholder-white w-full"
+                styleClass="w-full"
                 autocomplete="new-password"
               ></p-password>
             </div>
+            <span class="field-error" *ngIf="showFieldError('password')">
+              {{ getErrorMessage("password") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div
+            class="w-full"
+            [class.invalid]="
+              showFieldError('confirmPassword') || passwordsDoNotMatch
+            "
+          >
             <p class="font-bold text-gray-800">Repita la Contraseña:</p>
-            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
+            <div class="bg-[#8DD0E1] rounded-md px-3 py-2 w-full">
               <p-password
                 formControlName="confirmPassword"
                 [toggleMask]="true"
                 [feedback]="false"
                 placeholder="Ingrese su contraseña"
-                inputStyleClass="bg-[#8DD0E1] focus:outline-none placeholder-white"
-                styleClass="w-full flex items-center"
+                inputStyleClass="bg-[#8DD0E1] focus:outline-none placeholder-white w-full"
+                styleClass="w-full"
                 autocomplete="new-password"
               ></p-password>
             </div>
+            <span class="field-error" *ngIf="passwordsDoNotMatch">
+              Las contraseñas deben coincidir.
+            </span>
           </div>
-          <div class="col-span-2 flex items-center justify-center mt-4">
+
+          <div
+            class="justify-center col-span-1 md:col-span-2 flex flex-wrap items-center gap-2 md:gap-3 mt-2"
+            [class.invalid]="showFieldError('acceptTerms')"
+          >
             <p-checkbox
               name="politicas"
               [binary]="true"
@@ -135,14 +188,20 @@
               (onChange)="onCheckboxClick($event)"
               inputId="politicas"
             ></p-checkbox>
-            <label for="politicas" class="ml-2 text-gray-800 cursor-pointer"
-              >Términos y Condiciones</label
-            >
+            <label for="politicas" class="text-gray-800 cursor-pointer">
+              Términos y Condiciones
+            </label>
+            <span class="field-error" *ngIf="showFieldError('acceptTerms')">
+              {{ getErrorMessage("acceptTerms") }}
+            </span>
           </div>
-          <div class="col-span-2 flex items-center justify-center mt-6">
+
+          <div
+            class="col-span-1 md:col-span-2 flex items-center justify-center mt-6"
+          >
             <button
-              class="px-6 py-2 rounded-xl bg-[#36A6EB] font-bold hover:bg-[#3b7a89] duration-150 focus:outline-none focus:ring-2 focus:ring-[#3b7a89] transition-colors"
-              [disabled]="!signup.valid || !isAccepted || isUploading"
+              class="w-full md:w-auto px-6 py-2 rounded-xl bg-[#36A6EB] font-bold hover:bg-[#3b7a89] duration-150 focus:outline-none focus:ring-2 focus:ring-[#3b7a89] transition-colors"
+              [disabled]="signup.invalid || passwordsDoNotMatch || !isAccepted"
               (click)="onSignUp()"
             >
               <span *ngIf="!isUploading">Registrarse</span>

@@ -22,6 +22,7 @@ import { ConversationCloseRequest } from '../../../shared/interfaces/Conversatio
 import { StatisticsService } from '../../../shared/services/statistics.service';
 import { CanComponentDeactivate } from '../../../shared/guards/ChatDeactivateGuard.guard';
 import { DialogModule } from 'primeng/dialog';
+import { MessageService as MessageToastService } from 'primeng/api';
 
 @Component({
   selector: 'app-chat',
@@ -63,7 +64,8 @@ export class ChatComponent
     private route: ActivatedRoute,
     private messageService: MessageService,
     private conversationService: ConversationService,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private messageToastService: MessageToastService
   ) {
     this.chatForm = this.fb.group({
       message: ['', [Validators.required, Validators.minLength(1)]],
@@ -110,6 +112,11 @@ export class ChatComponent
               if (response.status_code === 200) {
                 this.conversationId = response.data.id;
                 console.log('nueva data conversation', response.data);
+                this.messageToastService.add({
+                  severity: 'info',
+                  summary: 'Nueva conversación',
+                  detail: 'Se ha iniciado una nueva conversación.',
+                });
               }
             },
           });
@@ -140,6 +147,11 @@ export class ChatComponent
           next: (response) => {
             if (response.status_code == 200) {
               console.log(response.data);
+              this.messageToastService.add({
+                severity: 'info',
+                summary: 'Conversación eliminada',
+                detail: 'La conversación sin mensajes ha sido eliminada.',
+              });
             }
           },
         });
@@ -173,6 +185,7 @@ export class ChatComponent
       conversationId: this.conversationId ?? 0,
       sequence: this.messages.length,
       senderType: 'user',
+      userName: localStorage.getItem('userFirstName') || 'Usuario',
     };
 
     this.messages.push(newMessage);
@@ -183,15 +196,22 @@ export class ChatComponent
     this.isBotTurn = true;
 
     //IMPLEMENTACION BACKEND
-    // this.messageService.saveMessage(newMessage).subscribe({
-    //   next: () => {
-    //     setTimeout(() => this.botReply(), 1000);
-    //   },
-    //   error: (err: any) => console.error('Error al guardar mensaje:', err),
-    // });
-    setTimeout(() => {
-      this.botReply(), 1000;
+    this.messageService.sendMessage(newMessage).subscribe({
+      next: (response) => {
+        console.log('Mensaje guardado con éxito:', response);
+        if (response.status_code === 200) {
+          this.messages.push(response.data);
+          this.scrollChatToBottom();
+
+          this.isBotTurn = false;
+        }
+        // setTimeout(() => this.botReply(), 1000);
+      },
+      error: (err: any) => console.error('Error al guardar mensaje:', err),
     });
+    // setTimeout(() => {
+    //   this.botReply(), 1000;
+    // });
   }
 
   private scrollChatToBottom(): void {
@@ -256,6 +276,11 @@ export class ChatComponent
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Conversacion cerrado con exito');
+          this.messageToastService.add({
+            severity: 'success',
+            summary: 'Conversación cerrada',
+            detail: 'La conversación se ha cerrado correctamente.',
+          });
           this.handleClose();
         }
       },
