@@ -11,7 +11,9 @@
     class="w-full max-w-5xl bg-white/70 backdrop-blur-sm shadow-xl rounded-2xl border border-gray-100 p-4 sm:p-6 md:p-8"
   >
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-      <div class="md:col-span-1 flex flex-col items-center gap-3 md:justify-center md:self-center">
+      <div
+        class="md:col-span-1 flex flex-col items-center gap-3 md:justify-center md:self-center"
+      >
         <p-image
           *ngIf="selectedImage"
           [src]="selectedImage"
@@ -66,8 +68,8 @@
             </span>
           </div>
 
-        <div class="w-full" [class.invalid]="showFieldError('birthDate')">
-          <p class="font-bold text-gray-800">Fecha de Nacimiento:</p>
+          <div class="w-full" [class.invalid]="showFieldError('birthDate')">
+            <p class="font-bold text-gray-800">Fecha de Nacimiento:</p>
             <div class="bg-[#8DD0E1] rounded-md px-3 py-2 w-full">
               <p-calendar
                 formControlName="birthDate"
@@ -176,7 +178,7 @@
           </div>
 
           <div
-            class="col-span-1 md:col-span-2 flex flex-wrap items-center gap-2 md:gap-3 mt-2"
+            class="justify-center col-span-1 md:col-span-2 flex flex-wrap items-center gap-2 md:gap-3 mt-2"
             [class.invalid]="showFieldError('acceptTerms')"
           >
             <p-checkbox
@@ -194,7 +196,9 @@
             </span>
           </div>
 
-          <div class="col-span-1 md:col-span-2 flex items-center justify-center mt-6">
+          <div
+            class="col-span-1 md:col-span-2 flex items-center justify-center mt-6"
+          >
             <button
               class="w-full md:w-auto px-6 py-2 rounded-xl bg-[#36A6EB] font-bold hover:bg-[#3b7a89] duration-150 focus:outline-none focus:ring-2 focus:ring-[#3b7a89] transition-colors"
               [disabled]="signup.invalid || passwordsDoNotMatch || !isAccepted"

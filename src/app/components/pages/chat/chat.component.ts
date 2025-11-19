@@ -185,6 +185,7 @@ export class ChatComponent
       conversationId: this.conversationId ?? 0,
       sequence: this.messages.length,
       senderType: 'user',
+      userName: localStorage.getItem('userFirstName') || 'Usuario',
     };
 
     this.messages.push(newMessage);
@@ -195,15 +196,22 @@ export class ChatComponent
     this.isBotTurn = true;
 
     //IMPLEMENTACION BACKEND
-    // this.messageService.saveMessage(newMessage).subscribe({
-    //   next: () => {
-    //     setTimeout(() => this.botReply(), 1000);
-    //   },
-    //   error: (err: any) => console.error('Error al guardar mensaje:', err),
-    // });
-    setTimeout(() => {
-      this.botReply(), 1000;
+    this.messageService.sendMessage(newMessage).subscribe({
+      next: (response) => {
+        console.log('Mensaje guardado con éxito:', response);
+        if (response.status_code === 200) {
+          this.messages.push(response.data);
+          this.scrollChatToBottom();
+
+          this.isBotTurn = false;
+        }
+        // setTimeout(() => this.botReply(), 1000);
+      },
+      error: (err: any) => console.error('Error al guardar mensaje:', err),
     });
+    // setTimeout(() => {
+    //   this.botReply(), 1000;
+    // });
   }
 
   private scrollChatToBottom(): void {
