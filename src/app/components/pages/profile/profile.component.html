@@ -1,15 +1,14 @@
 <div class="flex flex-col w-full h-full">
   <div class="flex flex-row h-[65%]">
     <div class="flex flex-col items-center justify-center w-[35%] h-full">
-      <p-image
+      <img
         *ngIf="selectedImage"
         [src]="selectedImage"
         alt="Foto de Perfil"
         width="350"
-        height="350"
-        class="block object-contain"
-      >
-      </p-image>
+        height="150"
+        class="block max-w-[350px] max-h-[350px] object-contain"
+      />
       <input
         type="file"
         class="bg-[#468999] font-bold rounded-md"

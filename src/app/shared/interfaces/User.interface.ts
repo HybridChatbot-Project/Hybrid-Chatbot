@@ -1,3 +1,4 @@
+import { NgModel } from '@angular/forms';
 import { Genres } from './Genre.interface';
 
 export interface UserRequest {
@@ -8,6 +9,8 @@ export interface UserRequest {
   birthDate: Date;
   phoneNumber: string;
   gender: number;
+  profileImageUrl?: string;
+  profileImagePublicId?: string;
 }
 
 export interface UserResponse {
@@ -19,4 +22,12 @@ export interface UserResponse {
   phoneNumber: string;
   genre: Genres;
   isActive: number;
+  profileImage?: string;
+  publicImageId?: string;
+}
+
+export interface UserImageRequest {
+  userId: number;
+  image: string;
+  imageId: string;
 }

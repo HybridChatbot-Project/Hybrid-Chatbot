@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "chart.js": "^4.5.1",
+    "cloudinary": "^2.8.0",
     "crypto-js": "^4.2.0",
     "jwt-decode": "^4.0.0",
     "ng-recaptcha": "^13.2.1",

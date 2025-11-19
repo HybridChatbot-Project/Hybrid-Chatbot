@@ -14,4 +14,10 @@ export const environments = {
     '/api-hybridchatbot-stats/conversation-evaluation',
   secretKeyUrl: 'SecurityHibridChatbotSecretKeyJwt1',
   secretApiKeyNews: 'pub_d86240a781f34fca8c2020b22167eb6a',
+  cloudinary: {
+    cloud_name: 'dbcstfmtm',
+    upload_preset: 'hybridchatbot',
+    api_key: '848695154197896',
+    api_secret: 'C2jfQycFS7bqsnCfMZp1oIi89R0',
+  },
 };

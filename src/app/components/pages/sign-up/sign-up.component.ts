@@ -18,6 +18,8 @@ import { UserRequest } from '../../../shared/interfaces/User.interface';
 import { AuthService } from '../../../shared/services/auth.service';
 import { response } from 'express';
 import { GenreService } from '../../../shared/services/genre.service';
+import { CluodinaryService } from '../../../shared/services/cluodinary.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-sign-up',
@@ -43,12 +45,16 @@ export class SignUpComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private genreService: GenreService
+    private genreService: GenreService,
+    private cloudinaryService: CluodinaryService
   ) {}
 
   selectedImage?: string;
+  selectedFile?: File;
   showPolicies: boolean = false;
   isAccepted: boolean = false;
+  isUploading: boolean = false;
+  uploadProgress: number = 0;
 
   signup = new FormGroup({
     firstName: new FormControl(),
@@ -89,6 +95,18 @@ export class SignUpComponent implements OnInit {
     }
 
     const file = input.files[0];
+
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecciona un archivo de imagen válido');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('La imagen no debe superar los 10MB');
+      return;
+    }
+
+    this.selectedFile = file;
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -121,26 +139,53 @@ export class SignUpComponent implements OnInit {
       this.isAccepted &&
       this.signup.value.password === this.signup.value.confirmPassword
     ) {
-      const formRegister: UserRequest = {
-        firstName: this.signup.value.firstName!,
-        lastName: this.signup.value.lastName!,
-        birthDate: this.signup.value.birthDate!,
-        gender: this.signup.value.genre!,
-        email: this.signup.value.email!,
-        password: this.signup.value.password!,
-        phoneNumber: this.signup.value.phoneNumber!,
-      };
-      this.authService.registerUser(formRegister).subscribe({
-        next: (response) => {
-          if (response.status_code === 200) {
-            console.log('Usuario registrado con éxito');
-            this.goToLogin();
-          }
-        },
-      });
-    } else {
-      console.log('El formulario no es válido');
+      this.isUploading = true;
+      if (this.selectedFile) {
+        this.cloudinaryService
+          .uploadImage(this.selectedFile, 'user_profiles')
+          .subscribe({
+            next: (response) => {
+              console.log('Imagen subida a Cloudinary:', response);
+              this.registerUser(response.secure_url, response.public_id);
+            },
+            error: (error) => {
+              console.error('Error al subir imagen:', error);
+              this.isUploading = false;
+              alert('Error al subir la imagen. Intenta nuevamente.');
+            },
+          });
+      } else {
+        this.registerUser();
+      }
     }
+  }
+
+  registerUser(imageUrl?: string, publicId?: string): void {
+    const formRegister: UserRequest = {
+      firstName: this.signup.value.firstName!,
+      lastName: this.signup.value.lastName!,
+      birthDate: this.signup.value.birthDate!,
+      gender: this.signup.value.genre!,
+      email: this.signup.value.email!,
+      password: this.signup.value.password!,
+      phoneNumber: this.signup.value.phoneNumber!,
+      profileImageUrl: imageUrl,
+      profileImagePublicId: publicId,
+    };
+    this.authService.registerUser(formRegister).subscribe({
+      next: (response) => {
+        this.isUploading = false;
+        if (response.status_code === 200) {
+          console.log('Usuario registrado con éxito');
+          this.goToLogin();
+        }
+      },
+      error: (error) => {
+        this.isUploading = false;
+        console.error('Error al registrar usuario:', error);
+        alert('Error al registrar el usuario. Intenta nuevamente.');
+      },
+    });
   }
 
   goToLogin(): void {
