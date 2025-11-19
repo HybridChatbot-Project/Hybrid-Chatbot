@@ -22,6 +22,7 @@ import { ConversationCloseRequest } from '../../../shared/interfaces/Conversatio
 import { StatisticsService } from '../../../shared/services/statistics.service';
 import { CanComponentDeactivate } from '../../../shared/guards/ChatDeactivateGuard.guard';
 import { DialogModule } from 'primeng/dialog';
+import { MessageService as MessageToastService } from 'primeng/api';
 
 @Component({
   selector: 'app-chat',
@@ -63,7 +64,8 @@ export class ChatComponent
     private route: ActivatedRoute,
     private messageService: MessageService,
     private conversationService: ConversationService,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private messageToastService: MessageToastService
   ) {
     this.chatForm = this.fb.group({
       message: ['', [Validators.required, Validators.minLength(1)]],
@@ -110,6 +112,11 @@ export class ChatComponent
               if (response.status_code === 200) {
                 this.conversationId = response.data.id;
                 console.log('nueva data conversation', response.data);
+                this.messageToastService.add({
+                  severity: 'info',
+                  summary: 'Nueva conversación',
+                  detail: 'Se ha iniciado una nueva conversación.',
+                });
               }
             },
           });
@@ -140,6 +147,11 @@ export class ChatComponent
           next: (response) => {
             if (response.status_code == 200) {
               console.log(response.data);
+              this.messageToastService.add({
+                severity: 'info',
+                summary: 'Conversación eliminada',
+                detail: 'La conversación sin mensajes ha sido eliminada.',
+              });
             }
           },
         });
@@ -256,6 +268,11 @@ export class ChatComponent
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Conversacion cerrado con exito');
+          this.messageToastService.add({
+            severity: 'success',
+            summary: 'Conversación cerrada',
+            detail: 'La conversación se ha cerrado correctamente.',
+          });
           this.handleClose();
         }
       },

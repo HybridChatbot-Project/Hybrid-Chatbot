@@ -22,6 +22,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { GenreService } from '../../../shared/services/genre.service';
 import { CluodinaryService } from '../../../shared/services/cluodinary.service';
 import { error } from 'console';
+import { MessageService } from 'primeng/api';
 
 const NAME_REGEX = /^[A-Za-zÁÉÍÓÚÜáéíóúüÑñ\s]+$/;
 const EMAIL_DOT_COM_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.com$/i;
@@ -75,7 +76,8 @@ export class SignUpComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private genreService: GenreService,
-    private cloudinaryService: CluodinaryService
+    private cloudinaryService: CluodinaryService,
+    private messageService: MessageService
   ) {}
 
   selectedImage?: string;
@@ -231,12 +233,16 @@ export class SignUpComponent implements OnInit {
           .subscribe({
             next: (response) => {
               console.log('Imagen subida a Cloudinary:', response);
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Imagen subida',
+                detail: 'La imagen de tu perfil se ha subido correctamente.',
+              });
               this.registerUser(response.secure_url, response.public_id);
             },
             error: (error) => {
               console.error('Error al subir imagen:', error);
               this.isUploading = false;
-              alert('Error al subir la imagen. Intenta nuevamente.');
             },
           });
       } else {
@@ -262,13 +268,17 @@ export class SignUpComponent implements OnInit {
         this.isUploading = false;
         if (response.status_code === 200) {
           console.log('Usuario registrado con éxito');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Registro exitoso',
+            detail: 'Tu cuenta ha sido creada correctamente.',
+          });
           this.goToLogin();
         }
       },
       error: (error) => {
         this.isUploading = false;
         console.error('Error al registrar usuario:', error);
-        alert('Error al registrar el usuario. Intenta nuevamente.');
       },
     });
   }

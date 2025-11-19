@@ -21,7 +21,7 @@
             formControlName="email"
           />
           <span class="field-error" *ngIf="showFieldError('email')">
-            {{ getErrorMessage('email') }}
+            {{ getErrorMessage("email") }}
           </span>
         </div>
 
@@ -39,7 +39,7 @@
             ></p-password>
           </div>
           <span class="field-error" *ngIf="showFieldError('password')">
-            {{ getErrorMessage('password') }}
+            {{ getErrorMessage("password") }}
           </span>
         </div>
 
@@ -47,7 +47,10 @@
           class="flex flex-col items-center mt-4 space-y-2"
           style="transform: scale(0.85); transform-origin: center"
         >
-          <re-captcha [siteKey]="key" (resolved)="onCaptchaResolved($event)"></re-captcha>
+          <re-captcha
+            [siteKey]="key"
+            (resolved)="onCaptchaResolved($event)"
+          ></re-captcha>
           <span class="field-error" *ngIf="captchaTouched && !captchaToken">
             Completa el reCAPTCHA para continuar
           </span>

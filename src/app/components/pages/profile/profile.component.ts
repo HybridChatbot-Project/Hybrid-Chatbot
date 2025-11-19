@@ -24,6 +24,7 @@ import {
   UserRequest,
 } from '../../../shared/interfaces/User.interface';
 import { CluodinaryService } from '../../../shared/services/cluodinary.service';
+import { MessageService } from 'primeng/api';
 
 type GenreOption = { id: number; name: string };
 
@@ -157,7 +158,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private userService: UserService,
     private genreService: GenreService,
-    private cloudinaryService: CluodinaryService
+    private cloudinaryService: CluodinaryService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -251,7 +253,16 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Profile updated');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Perfil modificado',
+            detail: 'Los datos de tu perfil se han actualizado correctamente.',
+          });
+          this.loadUserProfile(this.userId);
         }
+      },
+      error(err) {
+        console.error('❌ Error al actualizar el perfil:', err);
       },
     });
   }
@@ -261,6 +272,15 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Profile deleted');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Perfil eliminado',
+            detail: 'Su perfil se ha eliminado correctamente.',
+          });
+          localStorage.clear();
+          setTimeout(() => {
+            window.location.href = '/auth/login';
+          }, 2000);
         }
       },
     });
@@ -355,6 +375,11 @@ export class ProfileComponent implements OnInit {
         if (response.status_code == 200) {
           console.log('Imagen de perfil actualizada en el servidor');
           this.loadUserProfile(this.userId);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Imagen actualizada',
+            detail: 'La imagen de tu perfil se ha actualizado correctamente.',
+          });
         }
       },
     });
