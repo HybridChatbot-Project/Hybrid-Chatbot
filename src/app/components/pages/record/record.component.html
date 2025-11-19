@@ -6,7 +6,15 @@
   </div>
 
   <div class="w-[95%]">
-    <p-table [value]="infoData" [tableStyle]="{ width: '100%' }">
+    <p-table
+      [value]="infoData"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [tableStyle]="{ width: '100%' }"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando registros del {first} al {last} del total de {totalRecords} resultados"
+    >
       <ng-template pTemplate="header">
         <tr>
           <th class="bg-[#a3c9c3] rounded-tl-xl text-center">Fecha</th>

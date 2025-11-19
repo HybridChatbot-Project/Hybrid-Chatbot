@@ -279,6 +279,11 @@ export class SignUpComponent implements OnInit {
       error: (error) => {
         this.isUploading = false;
         console.error('Error al registrar usuario:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error en el registro',
+          detail: error.error || 'Ocurrió un error al registrar el usuario.',
+        });
       },
     });
   }
