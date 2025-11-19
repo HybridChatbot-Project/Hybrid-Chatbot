@@ -1,108 +1,114 @@
-<section class="profile-shell">
-  <article class="identity-card">
-    <div class="avatar-wrapper">
-      <p-image
-        [src]="selectedImage || 'assets/images/logo.png'"
-        alt="Foto de perfil"
-        width="220"
-        height="220"
-        styleClass="avatar-image"
-        class="block max-w-[350px] max-h-[350px] object-contain"
-      ></p-image>
-      <label class="avatar-upload">
-        Cambiar foto
-        <input
-          type="file"
-          (change)="onFileSelected($event)"
-          accept="image/*"
-          hidden
-        />
-      </label>
-    </div>
-    <div class="identity-meta">
-      <h1>
-        {{ profileForm.value.firstName || "Usuario" }}
-        {{ profileForm.value.lastName || "" }}
-      </h1>
-      <p>{{ profileForm.value.email || "Sin correo disponible" }}</p>
-    </div>
-    <ul class="identity-badges">
-      <li>
-        <span>Celular</span>
-        <strong>{{ phoneNumberDisplay }}</strong>
-      </li>
-      <li>
-        <span>Fecha de nacimiento</span>
-        <strong>{{ birthDateDisplay }}</strong>
-      </li>
-      <li>
-        <span>Género</span>
-        <strong>{{ selectedGenreLabel }}</strong>
-      </li>
-    </ul>
-  </article>
+<form [formGroup]="profileForm">
+  <section class="profile-shell">
+    <article class="identity-card">
+      <div class="avatar-wrapper">
+        <p-image
+          [src]="selectedImage || 'assets/images/logo.png'"
+          alt="Foto de perfil"
+          width="220"
+          height="220"
+          styleClass="avatar-image"
+          class="block max-w-[350px] max-h-[350px] object-contain"
+        ></p-image>
+        <label class="avatar-upload">
+          Cambiar foto
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            hidden
+          />
+        </label>
+      </div>
+      <div class="identity-meta">
+        <h1 formControlName="firstName">
+          {{ profileForm.get("firstName")?.value || "Usuario" }}
+          {{ profileForm.get("lastName")?.value || "" }}
+        </h1>
+        <p>{{ profileForm.get("email")?.value || "Sin correo disponible" }}</p>
+      </div>
+      <ul class="identity-badges">
+        <li>
+          <span>Celular</span>
+          <strong>{{ phoneNumberDisplay }}</strong>
+        </li>
+        <li>
+          <span>Fecha de nacimiento</span>
+          <strong>{{ birthDateDisplay }}</strong>
+        </li>
+        <li>
+          <span>Género</span>
+          <strong>{{ selectedGenreLabel }}</strong>
+        </li>
+      </ul>
+    </article>
 
-  <article class="profile-form-card">
-    <header class="section-header">
-      <p class="section-eyebrow">Información personal</p>
-      <h2>Gestiona tus datos</h2>
-      <p>
-        Estos datos se sincronizan con tu cuenta para personalizar la
-        experiencia.
-      </p>
-    </header>
+    <article class="profile-form-card">
+      <header class="section-header">
+        <p class="section-eyebrow">Información personal</p>
+        <h2>Gestiona tus datos</h2>
+        <p>
+          Estos datos se sincronizan con tu cuenta para personalizar la
+          experiencia.
+        </p>
+      </header>
 
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="label">Nombres</span>
-        <span class="value">{{ profileForm.value.firstName || "—" }}</span>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Nombres</span>
+          <span class="value">{{
+            profileForm.get("firstName")?.value || "—"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Apellidos</span>
+          <span class="value">{{
+            profileForm.get("lastName")?.value || "—"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Email</span>
+          <span class="value">{{
+            profileForm.get("email")?.value || "—"
+          }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Fecha de nacimiento</span>
+          <span class="value">{{ birthDateDisplay }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Celular</span>
+          <span class="value">{{ phoneNumberDisplay }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Género</span>
+          <span class="value">{{ selectedGenreLabel }}</span>
+        </div>
       </div>
-      <div class="info-item">
-        <span class="label">Apellidos</span>
-        <span class="value">{{ profileForm.value.lastName || "—" }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Email</span>
-        <span class="value">{{ profileForm.value.email || "—" }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Fecha de nacimiento</span>
-        <span class="value">{{ birthDateDisplay }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Celular</span>
-        <span class="value">{{ phoneNumberDisplay }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Género</span>
-        <span class="value">{{ selectedGenreLabel }}</span>
-      </div>
-    </div>
 
-    <div class="actions">
-      <button
-        pButton
-        label="Editar"
-        class="p-button-rounded p-button-success"
-        (click)="editModal('editar')"
-      ></button>
-      <button
-        pButton
-        label="Eliminar"
-        class="p-button-rounded p-button-text p-button-danger"
-        (click)="editModal('eliminar')"
-      ></button>
-    </div>
-  </article>
-</section>
-
+      <div class="actions">
+        <button
+          pButton
+          label="Editar"
+          class="p-button-rounded p-button-success"
+          (click)="editModal('editar')"
+        ></button>
+        <button
+          pButton
+          label="Eliminar"
+          class="p-button-rounded p-button-text p-button-danger"
+          (click)="editModal('eliminar')"
+        ></button>
+      </div>
+    </article>
+  </section>
+</form>
 <p-dialog
   [(visible)]="showEditForm"
   [modal]="true"
   header="Edita tu información"
   [style]="{ width: '720px' }"
   [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
-  contentStyle="overflow: visible"
 >
   <div class="dialog-body">
     <form [formGroup]="editForm" class="dialog-grid">

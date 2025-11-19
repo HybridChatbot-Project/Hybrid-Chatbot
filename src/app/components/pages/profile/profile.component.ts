@@ -361,11 +361,11 @@ export class ProfileComponent implements OnInit {
   }
 
   get phoneNumberDisplay(): string {
-    return this.profileForm.value.phoneNumber || '—';
+    return this.profileForm.get('phoneNumber')?.value || '—';
   }
 
   get birthDateDisplay(): string {
-    const date = this.profileForm.value.birthDate;
+    const date = this.profileForm.get('birthDate')?.value;
     if (!date) {
       return '—';
     }
@@ -399,7 +399,7 @@ export class ProfileComponent implements OnInit {
 
   showFieldError(form: FormGroup, controlName: string): boolean {
     const control = form.get(controlName);
-    return !!control && control.invalid && (control.dirty || control.touched);
+    return control! && control.invalid && (control.dirty || control.touched);
   }
 
   getErrorMessage(form: FormGroup, controlName: string): string {
