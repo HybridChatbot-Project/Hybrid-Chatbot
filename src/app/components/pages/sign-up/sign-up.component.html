@@ -142,10 +142,11 @@
           <div class="col-span-2 flex items-center justify-center mt-6">
             <button
               class="px-6 py-2 rounded-xl bg-[#36A6EB] font-bold hover:bg-[#3b7a89] duration-150 focus:outline-none focus:ring-2 focus:ring-[#3b7a89] transition-colors"
-              [disabled]="!signup.valid"
+              [disabled]="!signup.valid || !isAccepted || isUploading"
               (click)="onSignUp()"
             >
-              Registrarse
+              <span *ngIf="!isUploading">Registrarse</span>
+              <span *ngIf="isUploading">Procesando...</span>
             </button>
           </div>
         </form>

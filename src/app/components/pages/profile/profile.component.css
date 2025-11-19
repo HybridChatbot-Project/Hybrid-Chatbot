@@ -1,0 +1,30 @@
+:host ::ng-deep .p-image img {
+  @apply rounded-2xl shadow-lg border border-gray-200;
+}
+
+::ng-deep .p-dropdown {
+  width: 100% !important;
+  height: 40px !important ;
+  background-color: #8dd0e1 !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+::ng-deep .p-dropdown-label.p-placeholder {
+  color: white !important;
+}
+
+::ng-deep .p-dropdown-label,
+::ng-deep .p-dropdown-label.p-placeholder {
+  width: 100% !important;
+  padding-left: 0.75rem !important; /* espacio interno a la izquierda */
+  padding-right: 0.25rem !important; /* espacio interno a la derecha (para que no tape el ícono) */
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .p-dropdown-trigger {
+  padding-left: 0.5rem !important; /* opcional */
+  margin-left: 1.1rem !important; /* separa el icono del texto */
+}
