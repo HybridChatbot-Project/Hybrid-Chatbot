@@ -18,6 +18,10 @@ body .p-overlay {
   position: fixed !important;
 }
 
+input[type='file'] {
+  display: none;
+}
+
 .field-error {
   display: block;
   margin-top: 0.35rem;
@@ -27,12 +31,44 @@ body .p-overlay {
 }
 
 .invalid input,
-.invalid ::ng-deep .p-inputtext,
-.invalid ::ng-deep .p-dropdown,
-.invalid ::ng-deep .p-dropdown-label,
+.invalid ::ng-deep .p-inputtext:not(.p-dropdown-label),
 .invalid ::ng-deep .p-password input {
   border: 1px solid #e86a5f !important;
   box-shadow: 0 0 0 3px rgba(232, 106, 95, 0.2) !important;
+}
+
+.invalid ::ng-deep .p-dropdown {
+  border: 1px solid #e86a5f !important;
+  box-shadow: 0 0 0 3px rgba(232, 106, 95, 0.2) !important;
+}
+
+/* Ancho completo para inputs PrimeNG */
+::ng-deep .p-password {
+  width: 100% !important;
+  position: relative !important;
+}
+
+::ng-deep .p-password-input-wrapper {
+  width: 100% !important;
+  position: relative !important;
+}
+
+::ng-deep .p-password-input {
+  width: 100% !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding-right: 2.5rem !important;
+}
+
+::ng-deep .p-password-toggle-icon {
+  cursor: pointer !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  right: 0.75rem !important;
+  margin: 0 !important;
 }
 
 /* ::ng-deep .p-dropdown {
@@ -65,13 +101,16 @@ body .p-overlay {
 } */
 
 /*INPUT GENERO*/
-::ng-deep .p-dropdown {
+::ng-deep .p-dropdown,
+::ng-deep .p-dropdown .p-inputtext {
   width: 100% !important;
-  height: 40px !important ;
+  height: 48px !important;
   background-color: #8dd0e1 !important;
   border: none !important;
+  box-shadow: none !important;
   display: flex !important;
   align-items: center !important;
+  position: relative !important;
 }
 
 ::ng-deep .p-dropdown-label.p-placeholder {
@@ -82,14 +121,49 @@ body .p-overlay {
 ::ng-deep .p-dropdown-label.p-placeholder {
   width: 100% !important;
   padding-left: 0.75rem !important; /* espacio interno a la izquierda */
-  padding-right: 0.25rem !important; /* espacio interno a la derecha (para que no tape el ícono) */
+  padding-right: 2.5rem !important; /* espacio para clear + flecha */
+  height: 100% !important;
   display: flex;
   align-items: center;
+  border: none !important;
+  box-shadow: none !important;
+  line-height: 1.2 !important;
 }
 
 ::ng-deep .p-dropdown-trigger {
-  padding-left: 0.5rem !important; /* opcional */
-  margin-left: 1.1rem !important; /* separa el icono del texto */
+  height: 100% !important;
+  padding: 0 0.6rem !important;
+  margin-left: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 48px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .p-dropdown-trigger .p-dropdown-trigger-icon {
+  margin: 0 !important;
+  position: relative !important;
+  top: 0 !important;
+  transform: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  font-size: 1.2rem !important;
+}
+
+/* Ícono clear centrado y separado del texto */
+::ng-deep .p-dropdown .p-dropdown-clear-icon {
+  position: absolute !important;
+  right: 2.2rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /*INPUT CALENDARIO*/
