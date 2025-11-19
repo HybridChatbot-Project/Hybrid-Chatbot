@@ -16,27 +16,25 @@
 }
 
 ::ng-deep .p-password {
-  width: 300px !important;
-  display: flex !important;
-  align-items: center !important;
+  width: 100% !important;
+  position: relative !important;
 }
 
 ::ng-deep .p-password-input-wrapper {
   width: 100% !important;
-  display: flex !important;
-  align-items: center !important;
+  position: relative !important;
 }
 
-::ng-deep .p-password-input {
-  flex: 1 !important;
+::ng-deep .p-password input {
   width: 100% !important;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
+  padding-right: 2.5rem !important;
 }
 
+::ng-deep .p-password-toggle-mask,
 ::ng-deep .p-password-toggle-icon {
-  margin-left: 0.5rem !important;
-  cursor: pointer !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  right: 0.75rem !important;
+  margin: 0 !important;
 }

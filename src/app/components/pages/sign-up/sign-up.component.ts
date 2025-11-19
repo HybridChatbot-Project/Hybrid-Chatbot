@@ -22,7 +22,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { GenreService } from '../../../shared/services/genre.service';
 import { CluodinaryService } from '../../../shared/services/cluodinary.service';
 import { error } from 'console';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 
 const NAME_REGEX = /^[A-Za-zÁÉÍÓÚÜáéíóúüÑñ\s]+$/;
 const EMAIL_DOT_COM_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.com$/i;
@@ -71,15 +71,6 @@ function passwordMatchValidator(
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private genreService: GenreService,
-    private cloudinaryService: CluodinaryService,
-    private messageService: MessageService
-  ) {}
-
   selectedImage?: string;
   selectedFile?: File;
   showPolicies: boolean = false;
@@ -122,7 +113,42 @@ export class SignUpComponent implements OnInit {
     { id: 2, name: 'Femenino' },
   ];
 
+  es = {
+    firstDayOfWeek: 1,
+    dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+    dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+    dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+    monthNames: [
+      'enero',
+      'febrero',
+      'marzo',
+      'abril',
+      'mayo',
+      'junio',
+      'julio',
+      'agosto',
+      'septiembre',
+      'octubre',
+      'noviembre',
+      'diciembre',
+    ],
+    monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
+    today: 'Hoy',
+    clear: 'Limpiar',
+  };
+
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private router: Router,
+    private route: ActivatedRoute,
+    private genreService: GenreService,
+    private authService: AuthService,
+    private cloudinaryService: CluodinaryService,
+    private messageService: MessageService
+  ) {}
+
   ngOnInit(): void {
+    this.primengConfig.setTranslation(this.es);
     this.listGenres();
   }
 
