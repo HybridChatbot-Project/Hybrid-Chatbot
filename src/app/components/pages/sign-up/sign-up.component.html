@@ -30,7 +30,7 @@
     <div class="w-[65%] flex item justify-center">
       <div>
         <form [formGroup]="signup" class="grid grid-cols-2 gap-4">
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('firstName')">
             <p class="font-bold text-gray-800">Nombres:</p>
             <input
               type="text"
@@ -38,8 +38,11 @@
               placeholder="Ingrese sus nombres"
               formControlName="firstName"
             />
+            <span class="field-error" *ngIf="showFieldError('firstName')">
+              {{ getErrorMessage("firstName") }}
+            </span>
           </div>
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('lastName')">
             <p class="font-bold text-gray-800">Apellidos:</p>
             <input
               type="text"
@@ -47,9 +50,12 @@
               placeholder="Ingrese sus apellidos"
               formControlName="lastName"
             />
+            <span class="field-error" *ngIf="showFieldError('lastName')">
+              {{ getErrorMessage("lastName") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('birthDate')">
             <p class="font-bold text-gray-800">Fecha de Nacimiento:</p>
             <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
               <p-calendar
@@ -60,9 +66,12 @@
                 styleClass="w-full flex items-center"
               />
             </div>
+            <span class="field-error" *ngIf="showFieldError('birthDate')">
+              {{ getErrorMessage("birthDate") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('genre')">
             <p class="font-bold text-gray-800">Género</p>
             <div class="bg-[#8DD0E1] rounded-md flex items-center">
               <p-dropdown
@@ -76,9 +85,12 @@
                 styleClass="w-full flex items-center"
               />
             </div>
+            <span class="field-error" *ngIf="showFieldError('genre')">
+              {{ getErrorMessage("genre") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('email')">
             <p class="font-bold text-gray-800">Correo:</p>
             <input
               type="text"
@@ -86,19 +98,25 @@
               placeholder="Ingrese su correo"
               formControlName="email"
             />
+            <span class="field-error" *ngIf="showFieldError('email')">
+              {{ getErrorMessage("email") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('phoneNumber')">
             <p class="font-bold text-gray-800">Teléfono:</p>
             <input
-              type="number"
+              type="text"
               class="w-full rounded-md px-3 py-2 bg-[#8DD0E1] placeholder-white focus:outline-none"
-              placeholder="Ingrese su correo"
+              placeholder="Ingresa tu número"
               formControlName="phoneNumber"
             />
+            <span class="field-error" *ngIf="showFieldError('phoneNumber')">
+              {{ getErrorMessage("phoneNumber") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div class="w-full" [class.invalid]="showFieldError('password')">
             <p class="font-bold text-gray-800">Contraseña:</p>
             <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
               <p-password
@@ -111,9 +129,17 @@
                 autocomplete="new-password"
               ></p-password>
             </div>
+            <span class="field-error" *ngIf="showFieldError('password')">
+              {{ getErrorMessage("password") }}
+            </span>
           </div>
 
-          <div class="w-full">
+          <div
+            class="w-full"
+            [class.invalid]="
+              showFieldError('confirmPassword') || passwordsDoNotMatch
+            "
+          >
             <p class="font-bold text-gray-800">Repita la Contraseña:</p>
             <div class="bg-[#8DD0E1] rounded-md px-3 py-2 flex items-center">
               <p-password
@@ -126,8 +152,14 @@
                 autocomplete="new-password"
               ></p-password>
             </div>
+            <span class="field-error" *ngIf="passwordsDoNotMatch">
+              Las contraseñas deben coincidir.
+            </span>
           </div>
-          <div class="col-span-2 flex items-center justify-center mt-4">
+          <div
+            class="col-span-2 flex items-center justify-center mt-4"
+            [class.invalid]="showFieldError('acceptTerms')"
+          >
             <p-checkbox
               name="politicas"
               [binary]="true"
@@ -138,11 +170,14 @@
             <label for="politicas" class="ml-2 text-gray-800 cursor-pointer"
               >Términos y Condiciones</label
             >
+            <span class="field-error" *ngIf="showFieldError('acceptTerms')">
+              {{ getErrorMessage("acceptTerms") }}
+            </span>
           </div>
           <div class="col-span-2 flex items-center justify-center mt-6">
             <button
               class="px-6 py-2 rounded-xl bg-[#36A6EB] font-bold hover:bg-[#3b7a89] duration-150 focus:outline-none focus:ring-2 focus:ring-[#3b7a89] transition-colors"
-              [disabled]="!signup.valid || !isAccepted || isUploading"
+              [disabled]="signup.invalid || passwordsDoNotMatch || !isAccepted"
               (click)="onSignUp()"
             >
               <span *ngIf="!isUploading">Registrarse</span>

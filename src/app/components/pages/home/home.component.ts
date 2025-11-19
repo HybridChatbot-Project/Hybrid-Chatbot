@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import path from 'path';
-import { title } from 'process';
 
 @Component({
   selector: 'app-home',
@@ -97,6 +95,20 @@ export class HomeComponent {
 
   name: string = localStorage.getItem('userFirstName') || 'Usuario';
   homeRoutes: any = [];
+  mindfulSuggestions = [
+    {
+      title: 'Respira profundo',
+      description: 'Regálate unos segundos de calma antes de continuar.',
+    },
+    {
+      title: 'Revisa tus notas',
+      description: 'Los recursos guardados refuerzan lo que ves en el chat.',
+    },
+    {
+      title: 'Celebra el progreso',
+      description: 'Cada interacción suma; date crédito por estar aquí.',
+    },
+  ];
 
   sanitize(svg: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svg);

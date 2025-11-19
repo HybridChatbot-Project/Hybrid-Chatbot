@@ -18,6 +18,23 @@ body .p-overlay {
   position: fixed !important;
 }
 
+.field-error {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.invalid input,
+.invalid ::ng-deep .p-inputtext,
+.invalid ::ng-deep .p-dropdown,
+.invalid ::ng-deep .p-dropdown-label,
+.invalid ::ng-deep .p-password input {
+  border: 1px solid #e86a5f !important;
+  box-shadow: 0 0 0 3px rgba(232, 106, 95, 0.2) !important;
+}
+
 /* ::ng-deep .p-dropdown {
   width: 100% !important;
   border: none !important;
