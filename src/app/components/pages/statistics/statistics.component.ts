@@ -248,7 +248,12 @@ export class StatisticsComponent implements OnInit {
                 {
                   label: 'Puntaje',
                   data: response.data.map((x) => x.grade),
-                  backgroundColor: '#42A5F5',
+                  backgroundColor: 'rgba(31, 108, 104, 0.16)',
+                  borderColor: '#1f6c68',
+                  pointBackgroundColor: '#e9a85c',
+                  pointBorderColor: '#ffffff',
+                  tension: 0.35,
+                  fill: true,
                 },
               ],
             };
@@ -270,7 +275,12 @@ export class StatisticsComponent implements OnInit {
                 {
                   label: 'Nivel de Ansiedad',
                   data: response.data.map((x) => getResultByScore(x.grade)),
-                  backgroundColor: '#42A5F5',
+                  backgroundColor: 'rgba(233, 168, 92, 0.16)',
+                  borderColor: '#e9a85c',
+                  pointBackgroundColor: '#1f6c68',
+                  pointBorderColor: '#ffffff',
+                  tension: 0.35,
+                  fill: true,
                 },
               ],
             };
@@ -294,7 +304,12 @@ export class StatisticsComponent implements OnInit {
                 {
                   label: 'Puntaje',
                   data: response.data.map((x) => x.grade),
-                  backgroundColor: '#42A5F5',
+                  backgroundColor: 'rgba(31, 108, 104, 0.16)',
+                  borderColor: '#1f6c68',
+                  pointBackgroundColor: '#e9a85c',
+                  pointBorderColor: '#ffffff',
+                  tension: 0.35,
+                  fill: true,
                 },
               ],
             };
@@ -316,7 +331,12 @@ export class StatisticsComponent implements OnInit {
                 {
                   label: 'Nivel de Ansiedad',
                   data: response.data.map((x) => getResultByScore(x.grade)),
-                  backgroundColor: '#42A5F5',
+                  backgroundColor: 'rgba(233, 168, 92, 0.16)',
+                  borderColor: '#e9a85c',
+                  pointBackgroundColor: '#1f6c68',
+                  pointBorderColor: '#ffffff',
+                  tension: 0.35,
+                  fill: true,
                 },
               ],
             };

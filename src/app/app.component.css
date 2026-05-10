@@ -1,0 +1,122 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f8fbfa;
+}
+
+.app-header {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 6vh;
+  min-height: 3.75rem;
+  padding: 0.45rem clamp(1rem, 3vw, 2rem);
+  color: #173538;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.58)),
+    linear-gradient(90deg, #a7e4dc, #e8f8f4 56%, #fff0db);
+  border-bottom: 1px solid rgba(31, 108, 104, 0.12);
+  box-shadow: 0 10px 28px rgba(31, 91, 89, 0.1);
+}
+
+.app-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 0.18rem;
+  background: linear-gradient(90deg, #1f6c68, #a7e4dc, #e9a85c);
+}
+
+.header-brand,
+.header-status {
+  display: flex;
+  align-items: center;
+}
+
+.header-brand {
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.header-logo {
+  display: flex;
+  flex: 0 0 2.75rem;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(31, 108, 104, 0.1);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 22px rgba(31, 91, 89, 0.12);
+}
+
+.header-logo img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.header-copy {
+  min-width: 0;
+}
+
+.header-copy p,
+.header-copy span,
+.header-status p {
+  margin: 0;
+}
+
+.header-copy p {
+  color: #173538;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.header-copy span {
+  display: block;
+  margin-top: 0.12rem;
+  color: #5d6d69;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.header-status {
+  gap: 0.5rem;
+  padding: 0.48rem 0.75rem;
+  border: 1px solid rgba(31, 108, 104, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.header-status span {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #e9a85c;
+  box-shadow: 0 0 0 0.28rem rgba(233, 168, 92, 0.15);
+}
+
+.header-status p {
+  color: #1f6c68;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    min-height: 3.5rem;
+  }
+
+  .header-copy span,
+  .header-status p {
+    display: none;
+  }
+
+  .header-status {
+    padding: 0.58rem;
+  }
+}
