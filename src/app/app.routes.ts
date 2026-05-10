@@ -8,6 +8,7 @@ import { authGuard } from './shared/guards/AuthGuard.guard';
 export const routes: Routes = [
   {
     path: '',
+  //redirecTo: '/hybridchatbot/'
     redirectTo: '/auth/login',
     pathMatch: 'full',
   },

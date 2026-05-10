@@ -10,6 +10,11 @@ import { ChatDeactivateGuard } from '../../shared/guards/ChatDeactivateGuard.gua
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
     path: 'home',
     data: { breadcrumb: 'Inicio' },
     component: HomeComponent,

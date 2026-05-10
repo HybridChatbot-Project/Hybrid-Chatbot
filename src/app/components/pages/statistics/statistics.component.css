@@ -1,3 +1,251 @@
+:host {
+  display: block;
+  min-height: 100%;
+  color: #173538;
+}
+
+.statistics-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 100%;
+  padding: 2rem clamp(1rem, 4vw, 3rem) 3rem;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 12% 6%, rgba(143, 222, 211, 0.25), transparent 23rem),
+    radial-gradient(circle at 90% 2%, rgba(255, 240, 219, 0.75), transparent 19rem),
+    linear-gradient(180deg, #f8fbfa, #f0f7f5 55%, #f8f7f3);
+}
+
+.statistics-hero,
+.assessment-panel,
+:host ::ng-deep .statistics-card .p-card {
+  width: min(100%, 70rem);
+}
+
+.statistics-hero {
+  padding: 1.5rem 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.62)),
+    linear-gradient(130deg, #a7e4dc, #e8f8f4 52%, #fff0db);
+  box-shadow: 0 18px 44px rgba(31, 91, 89, 0.13);
+}
+
+.statistics-eyebrow {
+  margin: 0 0 0.45rem;
+  color: #1f6c68;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.statistics-hero h1 {
+  margin: 0;
+  color: #173538;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.08;
+}
+
+.statistics-hero p:last-child {
+  max-width: 45rem;
+  margin: 0.8rem 0 0;
+  color: rgba(23, 53, 56, 0.74);
+  line-height: 1.65;
+}
+
+:host ::ng-deep .statistics-card {
+  width: min(100%, 70rem) !important;
+}
+
+:host ::ng-deep .statistics-card .p-card {
+  overflow: hidden;
+  border: 1px solid rgba(223, 233, 230, 0.92);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 36px rgba(45, 74, 74, 0.08);
+}
+
+:host ::ng-deep .statistics-card .p-card-title {
+  margin: 0;
+  padding: 1.25rem 1.5rem 0;
+  color: #173538;
+  font-size: 1.22rem;
+  font-weight: 700;
+}
+
+:host ::ng-deep .statistics-card .p-card-title p {
+  margin: 0;
+}
+
+:host ::ng-deep .statistics-card .p-card-content {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.chart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(15rem, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.chart-panel,
+.chart-summary {
+  border: 1px solid rgba(223, 233, 230, 0.9);
+  border-radius: 18px;
+  background: #fbfdfc;
+}
+
+.chart-panel {
+  min-height: 20rem;
+  padding: 1rem;
+}
+
+.chart-panel p-chart {
+  display: block;
+  width: 100%;
+  min-height: 18rem;
+}
+
+.chart-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.15rem;
+  background: linear-gradient(180deg, #fbfdfc, #f3faf8);
+}
+
+.summary-title,
+.assessment-title,
+.question-title {
+  margin: 0;
+  color: #173538;
+  font-weight: 700;
+}
+
+.chart-summary p:not(.summary-title),
+.assessment-panel p:not(.assessment-title) {
+  margin: 0.45rem 0 0;
+  color: #5d6d69;
+  line-height: 1.6;
+}
+
+.period-actions {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.period-button,
+.assessment-button,
+.form-button {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.85rem 1.2rem;
+  color: #fff;
+  background: #1f6c68;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.period-button:hover,
+.assessment-button:hover,
+.form-button.save:hover {
+  transform: translateY(-2px);
+  background: #185956;
+  box-shadow: 0 12px 24px rgba(31, 108, 104, 0.18);
+}
+
+.period-button:focus-visible,
+.assessment-button:focus-visible,
+.form-button:focus-visible {
+  outline: 3px solid rgba(233, 168, 92, 0.42);
+  outline-offset: 3px;
+}
+
+.assessment-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(223, 233, 230, 0.92);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.74)),
+    linear-gradient(130deg, #e2f5f1, #fff4e6);
+  box-shadow: 0 16px 36px rgba(45, 74, 74, 0.08);
+}
+
+.assessment-button {
+  flex: 0 0 auto;
+  background: #e9a85c;
+  box-shadow: 0 12px 24px rgba(233, 168, 92, 0.18);
+}
+
+.assessment-button:hover {
+  background: #d99445;
+}
+
+.anxiety-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.question-row {
+  padding: 1rem;
+  border: 1px solid #e4eeeb;
+  border-radius: 16px;
+  background: #fbfdfc;
+}
+
+.question-title {
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.option-label {
+  margin-left: 0.55rem;
+  color: #4d625f;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.form-button.cancel {
+  color: #7f1d1d;
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+.form-button.cancel:hover {
+  transform: translateY(-2px);
+  background: #fecaca;
+}
+
 :host ::ng-deep .p-radiobutton .p-radiobutton-box {
   width: 20px;
   height: 20px;
@@ -7,12 +255,12 @@
 }
 
 :host ::ng-deep .p-radiobutton .p-radiobutton-box:hover {
-  border-color: #36a6eb;
+  border-color: #1f6c68;
 }
 
 :host ::ng-deep .p-radiobutton .p-radiobutton-box.p-highlight {
-  border-color: #36a6eb;
-  background-color: #36a6eb;
+  border-color: #1f6c68;
+  background-color: #1f6c68;
 }
 
 :host ::ng-deep .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
@@ -27,17 +275,51 @@
 }
 
 :host ::ng-deep .p-dialog .p-dialog-content {
-  padding: 1.5rem;
+  padding: 1.25rem;
+  background: #f8fbfa;
 }
 
 :host ::ng-deep .p-dialog .p-dialog-header {
-  padding: 1.5rem;
-  background-color: #f8fafc;
-  border-bottom: 2px solid #e2e8f0;
+  padding: 1.25rem 1.5rem;
+  background: #f8fbfa;
+  border-bottom: 1px solid #e2eee9;
 }
 
 :host ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+  color: #173538;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #2d3e40;
-  font-size: 18px;
+}
+
+@media (max-width: 900px) {
+  .chart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .period-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .statistics-page {
+    padding: 1rem 1rem 4rem;
+  }
+
+  .statistics-hero,
+  .assessment-panel {
+    padding: 1.25rem;
+    border-radius: 20px;
+  }
+
+  .assessment-panel,
+  .form-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .option-grid,
+  .period-actions {
+    grid-template-columns: 1fr;
+  }
 }

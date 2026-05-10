@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  height: 94vh;
+}
+
+.main-layout {
+  display: flex;
+  height: 100%;
+  background: #f0f7f5;
+}
+
+.sidebar-shell {
+  flex: 0 0 clamp(4.75rem, 18vw, 17rem);
+  min-width: 4.75rem;
+}
+
+.content-shell {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  background: #f8fbfa;
+}
+
+@media (max-width: 900px) {
+  .sidebar-shell {
+    flex-basis: 4.75rem;
+  }
+}
