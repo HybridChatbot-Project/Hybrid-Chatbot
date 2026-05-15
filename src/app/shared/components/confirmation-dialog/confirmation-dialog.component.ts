@@ -25,7 +25,7 @@ export class ConfirmationDialogComponent {
 
   onCancel(): void {
     this.visible = false;
-    this.visibleChange.emit(this.visible); // 🔹 necesario para [(visible)]
+    this.visibleChange.emit(this.visible);
     this.cancel.emit();
   }
 }

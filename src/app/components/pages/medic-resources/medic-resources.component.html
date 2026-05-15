@@ -1,31 +1,39 @@
-<div class="flex flex-col items-center mt-2">
+<div class="resources-page">
+  <section class="resources-hero">
+    <p class="resources-eyebrow">Biblioteca de apoyo</p>
+    <h1>Lista de Recursos</h1>
+    <p>
+      Explora lecturas y contenidos seleccionados para complementar tu proceso
+      de bienestar emocional.
+    </p>
+  </section>
+
+  <section class="resources-grid">
   @for (card of cardContent; track $index) {
   <p-card
-    class="flex flex-col justify-center items-center mt-2 w-1/2 rounded-2xl border-none shadow-none"
+    class="resource-card"
   >
     <ng-template pTemplate="title">
-      <p class="text-[22px] w-full font-bold text-center text-[#2d3e40] m-0">
-        {{ card.title }}
-      </p>
+      <p>{{ card.title }}</p>
     </ng-template>
     <ng-template pTemplate="content">
-      <div class="flex flex-row w-full justify-center items-center">
+      <div class="resource-content">
         <img
           [src]="card.image"
           alt="Imagen link"
-          width="120"
-          height="120"
-          class="mr-3 rounded-md"
         />
-        <div class="flex flex-col items-start text-justify">
-          <p class="font-bold m-0">Descripción:</p>
-          <p class="m-0 mb-0 text-[15px]">{{ card.description }}</p>
-          <div class="flex justify-center w-full mt-2">
+        <div class="resource-body">
+          <div>
+            <p class="resource-label">Descripción</p>
+            <p class="resource-description line-clamp-4">
+              {{ card.description }}
+            </p>
+          </div>
+          <div class="resource-actions">
             <a
               pButton
               label="Ver más"
-              class="p-button-sm text-white font-semibold rounded-full px-4 py-2"
-              style="background-color: #36a6eb; border: none"
+              class="resource-link"
               [href]="card.link"
               target="_blank"
             ></a>
@@ -34,8 +42,14 @@
       </div>
     </ng-template>
   </p-card>
-  } @if (this.isLoading == true) {
-  <p>Cargando data</p>
   }
-  <div #loadMoreRef></div>
+  </section>
+
+  @if (this.isLoading == true) {
+  <div class="loading-state">
+    <span class="loading-dot"></span>
+    <p>Cargando recursos</p>
+  </div>
+  }
+  <div #loadMoreRef class="load-more-sentinel"></div>
 </div>

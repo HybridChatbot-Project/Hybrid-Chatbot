@@ -19,7 +19,12 @@ import { ConfirmationDialogComponent } from '../../../shared/components/confirma
 import { UserService } from '../../../shared/services/user.service';
 import { GenreService } from '../../../shared/services/genre.service';
 import { DropdownModule } from 'primeng/dropdown';
-import { UserRequest } from '../../../shared/interfaces/User.interface';
+import {
+  UserImageRequest,
+  UserRequest,
+} from '../../../shared/interfaces/User.interface';
+import { CluodinaryService } from '../../../shared/services/cluodinary.service';
+import { MessageService } from 'primeng/api';
 
 type GenreOption = { id: number; name: string };
 
@@ -89,12 +94,15 @@ function validBirthDate(control: AbstractControl): ValidationErrors | null {
     DialogModule,
     ConfirmationDialogComponent,
     DropdownModule,
+    ImageModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
-  selectedImage?: string;
+  selectedImage: string = 'assets/images/logo.png';
+  selectedFile?: File;
+  loadImageId?: string;
   showEditForm: boolean = false;
   showConfirmationDialog: boolean = false;
   userId: number = Number(localStorage.getItem('userId'));
@@ -149,7 +157,9 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private genreService: GenreService
+    private genreService: GenreService,
+    private cloudinaryService: CluodinaryService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -172,7 +182,9 @@ export class ProfileComponent implements OnInit {
             ?.map((x: any) => ({ id: x.id, name: x.genre }))
             .filter((item: GenreOption) => !!item.name);
 
-          this.genres = apiGenres?.length ? apiGenres : [...this.fallbackGenres];
+          this.genres = apiGenres?.length
+            ? apiGenres
+            : [...this.fallbackGenres];
         }
       },
       error: () => {
@@ -189,13 +201,42 @@ export class ProfileComponent implements OnInit {
     }
 
     const file = input.files[0];
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecciona una imagen válida');
+      return;
+    }
+
+    this.selectedFile = file;
     const reader = new FileReader();
 
     reader.onload = () => {
       this.selectedImage = reader.result as string;
+      console.log('✅ Preview cargado');
     };
 
     reader.readAsDataURL(file);
+    this.uploadImageToCloudinary(this.selectedFile);
+  }
+
+  uploadImageToCloudinary(file: File): void {
+    this.cloudinaryService.deleteImage(this.loadImageId!).subscribe({
+      next: (response) => {
+        console.log('✅ Imagen eliminada de Cloudinary:', response);
+      },
+    });
+    this.cloudinaryService.uploadImage(file, 'user_profiles').subscribe({
+      next: (response) => {
+        console.log('✅ Imagen subida a Cloudinary:', response);
+        this.selectedImage = response.secure_url;
+        this.loadImageId = response.public_id;
+        this.updateProfileImage();
+      },
+      error: (error) => {
+        console.error('❌ Error al subir imagen:', error);
+        alert('Error al subir la imagen. Intenta nuevamente.');
+        this.loadUserProfile(this.userId);
+      },
+    });
   }
 
   editProfile(): void {
@@ -212,7 +253,16 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Profile updated');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Perfil modificado',
+            detail: 'Los datos de tu perfil se han actualizado correctamente.',
+          });
+          this.loadUserProfile(this.userId);
         }
+      },
+      error(err) {
+        console.error('❌ Error al actualizar el perfil:', err);
       },
     });
   }
@@ -222,6 +272,15 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response.status_code === 200) {
           console.log('Profile deleted');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Perfil eliminado',
+            detail: 'Su perfil se ha eliminado correctamente.',
+          });
+          localStorage.clear();
+          setTimeout(() => {
+            window.location.href = '/auth/login';
+          }, 2000);
         }
       },
     });
@@ -261,6 +320,7 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         if (response.status_code === 200) {
           //FORM PRINCIPAL
+          console.log(response.data);
           this.profileForm.controls['firstName'].setValue(
             response.data?.firstName
           );
@@ -276,6 +336,14 @@ export class ProfileComponent implements OnInit {
           );
           this.profileForm.controls['genre'].setValue(response.data?.genre.id);
 
+          if (response.data?.profileImage) {
+            this.selectedImage = response.data.profileImage;
+            this.loadImageId = response.data.publicImageId;
+            console.log('✅ Imagen asignada:', this.selectedImage);
+          } else {
+            console.log('⚠️ No hay imagen, usando default');
+          }
+
           //FORM EDICIÓN
           this.editForm.controls['firstName'].setValue(
             response.data?.firstName
@@ -286,7 +354,9 @@ export class ProfileComponent implements OnInit {
             response.data?.phoneNumber
           );
           this.editForm.controls['birthDate'].setValue(
-            this.formatDateDayMonthYear(new Date(response.data?.birthDate || ''))
+            this.formatDateDayMonthYear(
+              new Date(response.data?.birthDate || '')
+            )
           );
           this.editForm.controls['genre'].setValue(response.data?.genre.id);
         }
@@ -294,12 +364,33 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  updateProfileImage(): void {
+    const req: UserImageRequest = {
+      userId: this.userId,
+      image: this.selectedImage,
+      imageId: this.loadImageId!,
+    };
+    this.userService.updateImageUserById(req).subscribe({
+      next: (response) => {
+        if (response.status_code == 200) {
+          console.log('Imagen de perfil actualizada en el servidor');
+          this.loadUserProfile(this.userId);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Imagen actualizada',
+            detail: 'La imagen de tu perfil se ha actualizado correctamente.',
+          });
+        }
+      },
+    });
+  }
+
   get phoneNumberDisplay(): string {
-    return this.profileForm.value.phoneNumber || '—';
+    return this.profileForm.get('phoneNumber')?.value || '—';
   }
 
   get birthDateDisplay(): string {
-    const date = this.profileForm.value.birthDate;
+    const date = this.profileForm.get('birthDate')?.value;
     if (!date) {
       return '—';
     }
@@ -333,7 +424,7 @@ export class ProfileComponent implements OnInit {
 
   showFieldError(form: FormGroup, controlName: string): boolean {
     const control = form.get(controlName);
-    return !!control && control.invalid && (control.dirty || control.touched);
+    return control! && control.invalid && (control.dirty || control.touched);
   }
 
   getErrorMessage(form: FormGroup, controlName: string): string {

@@ -13,5 +13,14 @@ export class SidebarComponent {
 
   logout() {
     this.router.navigate(['/auth/login']);
+    this.removeCredentials();
+  }
+
+  removeCredentials() {
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('userId');
+    // localStorage.removeItem('userEmail');
+    // localStorage.removeItem('userFirstName');
+    localStorage.clear();
   }
 }

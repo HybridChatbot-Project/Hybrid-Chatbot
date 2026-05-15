@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BaseResponse, BaseResponseList } from '../interfaces/Common.inteface';
-import { ConversationResponse } from '../interfaces/Conversation.interface';
+import {
+  ConversationCloseRequest,
+  ConversationResponse,
+} from '../interfaces/Conversation.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,12 +24,27 @@ export class ConversationService {
     );
   }
 
+  createConversation(
+    userId: number
+  ): Observable<BaseResponse<ConversationResponse>> {
+    return this.http.post<BaseResponse<ConversationResponse>>(
+      `${this.url}/create-conversation/${userId}`,
+      {}
+    );
+  }
+
   closeConversationById(
-    id: number
+    data: ConversationCloseRequest
   ): Observable<BaseResponse<ConversationResponse>> {
     return this.http.put<BaseResponse<ConversationResponse>>(
-      `${this.url}/close-conversation/${id}`,
-      {}
+      `${this.url}/close-conversation`,
+      data
+    );
+  }
+
+  deleteConversation(id: number): Observable<BaseResponse<any>> {
+    return this.http.delete<BaseResponse<any>>(
+      `${this.url}/delete-conversation/${id}`
     );
   }
 }
