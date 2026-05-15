@@ -1,5 +1,5 @@
 export const environments = {
-  site_key: '6LfjyOsrAAAAAFcQaRcv8HYGL_u8bATvI0TxiASz',
+  site_key: '6LcL8uosAAAAAL8kVPyg2_XM68YBao9VtDmKKOWw',
   //secret_key: '6LfjyOsrAAAAANWY_HZreuyNxTx_-xlOzdYj8Uqt',
   domain: '',
   localhost: 'http://localhost:9000', //si se desear directamente el backend es 8080
