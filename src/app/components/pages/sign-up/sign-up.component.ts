@@ -9,7 +9,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -17,12 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ImageModule } from 'primeng/image';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { UserRequest } from '../../../shared/interfaces/User.interface';
-import { AuthService } from '../../../shared/services/auth.service';
-import { GenreService } from '../../../shared/services/genre.service';
-import { CluodinaryService } from '../../../shared/services/cluodinary.service';
-import { error } from 'console';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { PrimeNGConfig } from 'primeng/api';
 
 const NAME_REGEX = /^[A-Za-zÁÉÍÓÚÜáéíóúüÑñ\s]+$/;
 const EMAIL_DOT_COM_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.com$/i;
@@ -77,6 +72,7 @@ export class SignUpComponent implements OnInit {
   isAccepted: boolean = false;
   isUploading: boolean = false;
   uploadProgress: number = 0;
+  showVerification: boolean = false;
 
   signup = new FormGroup(
     {
@@ -139,27 +135,11 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private primengConfig: PrimeNGConfig,
-    private router: Router,
-    private route: ActivatedRoute,
-    private genreService: GenreService,
-    private authService: AuthService,
-    private cloudinaryService: CluodinaryService,
-    private messageService: MessageService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.primengConfig.setTranslation(this.es);
-    this.listGenres();
-  }
-
-  listGenres(): void {
-    this.genreService.listGenres().subscribe({
-      next: (response) => {
-        if (response.status_code === 200) {
-          this.genres = response.data.map((x) => ({ id: x.id, name: x.genre }));
-        }
-      },
-    });
   }
 
   showFieldError(controlName: string): boolean {
@@ -252,71 +232,15 @@ export class SignUpComponent implements OnInit {
       this.isAccepted &&
       this.signup.value.password === this.signup.value.confirmPassword
     ) {
-      this.isUploading = true;
-      if (this.selectedFile) {
-        this.cloudinaryService
-          .uploadImage(this.selectedFile, 'user_profiles')
-          .subscribe({
-            next: (response) => {
-              console.log('Imagen subida a Cloudinary:', response);
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Imagen subida',
-                detail: 'La imagen de tu perfil se ha subido correctamente.',
-              });
-              this.registerUser(response.secure_url, response.public_id);
-            },
-            error: (error) => {
-              console.error('Error al subir imagen:', error);
-              this.isUploading = false;
-            },
-          });
-      } else {
-        this.registerUser();
-      }
+      this.isUploading = false;
+      this.showVerification = true;
+    } else {
+      this.signup.markAllAsTouched();
     }
   }
 
-  registerUser(imageUrl?: string, publicId?: string): void {
-    const formRegister: UserRequest = {
-      firstName: this.signup.value.firstName!,
-      lastName: this.signup.value.lastName!,
-      birthDate: new Date(this.signup.value.birthDate!),
-      gender: this.signup.value.genre!,
-      email: this.signup.value.email!,
-      password: this.signup.value.password!,
-      phoneNumber: this.signup.value.phoneNumber!,
-      profileImageUrl: imageUrl,
-      profileImagePublicId: publicId,
-    };
-    this.authService.registerUser(formRegister).subscribe({
-      next: (response) => {
-        this.isUploading = false;
-        if (response.status_code === 200) {
-          console.log('Usuario registrado con éxito');
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Registro exitoso',
-            detail: 'Tu cuenta ha sido creada correctamente.',
-          });
-          this.goToLogin();
-        }
-      },
-      error: (error) => {
-        this.isUploading = false;
-        console.error('Error al registrar usuario:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error en el registro',
-          detail: error.error || 'Ocurrió un error al registrar el usuario.',
-        });
-      },
-    });
-  }
-
   goToLogin(): void {
-    this.router.navigate(['/auth/login'], {
-      relativeTo: this.route,
-    });
+    this.showVerification = false;
+    this.router.navigate(['/auth/login']);
   }
 }

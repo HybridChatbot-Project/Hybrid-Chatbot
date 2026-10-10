@@ -21,7 +21,7 @@
       <div class="login-header">
         <p class="login-eyebrow">Acceso seguro</p>
         <h2 id="login-title">Iniciar Sesión</h2>
-        <p>Usa tu correo registrado para continuar.</p>
+        <p>Ingresa cualquier usuario y contraseña para explorar la maqueta.</p>
       </div>
 
       <form [formGroup]="signin" class="login-form">
@@ -57,20 +57,11 @@
           </span>
         </div>
 
-        <div class="captcha-box">
-          <re-captcha
-            [siteKey]="key"
-            (resolved)="onCaptchaResolved($event)"
-          ></re-captcha>
-          <span class="field-error" *ngIf="captchaTouched && !captchaToken">
-            Completa el reCAPTCHA para continuar
-          </span>
-        </div>
-
         <button
+          type="submit"
           class="login-button"
           (click)="onLogin()"
-          [disabled]="signin.invalid || !captchaToken"
+          [disabled]="signin.invalid"
         >
           Iniciar Sesión
         </button>

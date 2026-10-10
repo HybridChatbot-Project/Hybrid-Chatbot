@@ -213,6 +213,7 @@
           </div>
 
           <button
+            type="button"
             class="signup-button"
             [disabled]="signup.invalid || passwordsDoNotMatch || !isAccepted"
             (click)="onSignUp()"
@@ -258,6 +259,31 @@
           (click)="onAcceptPolicies()"
         ></button>
       </div>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog
+    header="Cuenta verificada"
+    [(visible)]="showVerification"
+    [modal]="true"
+    [closable]="false"
+    [style]="{ width: 'min(92vw, 430px)' }"
+  >
+    <div class="verification-content">
+      <i class="pi pi-check-circle" aria-hidden="true"></i>
+      <h3>¡Registro completado!</h3>
+      <p>
+        Tu cuenta de demostración fue creada y verificada correctamente. Ya
+        puedes iniciar sesión con cualquier cuenta.
+      </p>
+    </div>
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        label="Ir a iniciar sesión"
+        class="policies-accept"
+        (click)="goToLogin()"
+      ></button>
     </ng-template>
   </p-dialog>
 </main>
