@@ -2,8 +2,8 @@ export const environments = {
   site_key: '6LfV_OosAAAAAJwqQ-3CD-0yY0AONy0i16prget6',
   //secret_key: '6LfjyOsrAAAAANWY_HZreuyNxTx_-xlOzdYj8Uqt',
   domain: '',
-  localhost: 'https://hybridchatbot-apigateway-v2.onrender.com', //si se desear directamente el backend es 8080
-  localhostStats: 'https://hybridchatbot-apigateway-v2.onrender.com',
+  localhost: 'http://localhost:8080',
+  localhostStats: 'http://localhost:8080',
   endpoint_auth: '/api-hybridchatbot/auth',
   endpoint_user: '/api-hybridchatbot/user',
   endpoint_genre: '/api-hybridchatbot/genre',
